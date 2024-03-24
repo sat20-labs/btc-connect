@@ -70,6 +70,7 @@ bun add btc-connect
 ```jsx
 import React from 'react';
 import { WalletConnectReact } from 'btc-connect/dist/react';
+import "btc-connect/dist/style/index.css";
 
 const App = () => {
   const config = {

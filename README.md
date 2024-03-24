@@ -70,6 +70,7 @@ Import the `WalletConnectReact` component and wrap your application with it:
 ```jsx
 import React from 'react';
 import { WalletConnectReact } from 'btc-connect/dist/react';
+import "btc-connect/dist/style/index.css";
 
 const App = () => {
   const config = {
