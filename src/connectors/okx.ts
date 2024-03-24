@@ -118,15 +118,32 @@ export type OkxWallet = {
     to,
     data,
   }: OkxWalletTypes.TransferNftProps) => Promise<OkxWalletTypes.TransferNftResult>;
-  send: ({ from, to, value, satBytes }: OkxWalletTypes.SendProps) => Promise<OkxWalletTypes.SendResult>;
+  send: ({
+    from,
+    to,
+    value,
+    satBytes,
+  }: OkxWalletTypes.SendProps) => Promise<OkxWalletTypes.SendResult>;
   signMessage: (
     message: string,
     type?: 'ecdsa' | 'bip322-simple'
   ) => Promise<string>;
   pushTx: (rawtx: string) => Promise<string>;
-  splitUtxo: ({ from, amount }: OkxWalletTypes.SplitUtxoProps) => Promise<OkxWalletTypes.SplitUtxoResult>;
-  inscribe: ({ type, from, tick, tid }: OkxWalletTypes.InscribeProps) => Promise<string>;
-  mint: ({ type, from, inscriptions }: OkxWalletTypes.MintProps) => Promise<OkxWalletTypes.MintResult>;
+  splitUtxo: ({
+    from,
+    amount,
+  }: OkxWalletTypes.SplitUtxoProps) => Promise<OkxWalletTypes.SplitUtxoResult>;
+  inscribe: ({
+    type,
+    from,
+    tick,
+    tid,
+  }: OkxWalletTypes.InscribeProps) => Promise<string>;
+  mint: ({
+    type,
+    from,
+    inscriptions,
+  }: OkxWalletTypes.MintProps) => Promise<OkxWalletTypes.MintResult>;
   signPsbt: (
     psbtHex: string,
     options?: {
@@ -202,9 +219,9 @@ declare global {
 
 export class OkxConnector extends BtcConnector {
   readonly id = 'okx';
-  readonly name = 'OKX';
-  readonly logo = okxLogo;
-  public homepage =
+  readonly name: string = 'OKX';
+  readonly logo: string = okxLogo;
+  public homepage: string =
     'https://www.okx.com/web3/build/docs/sdks/chains/bitcoin/provider';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
   public okxwallet: OkxWallet;
@@ -231,7 +248,7 @@ export class OkxConnector extends BtcConnector {
       this.connected = true;
       this.address = res.address;
       this.publicKey = res.publicKey;
-      await this.switchNetwork('livenet')
+      await this.switchNetwork('livenet');
       await this.getCurrentInfo();
     } catch (error) {
       throw error;

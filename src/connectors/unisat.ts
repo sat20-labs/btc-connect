@@ -104,8 +104,8 @@ declare global {
 
 export class UnisatConnector extends BtcConnector {
   readonly id = 'unisat';
-  readonly name = 'Unisat';
-  readonly logo = unisatLogo;
+  readonly name: string = 'Unisat';
+  readonly logo: string = unisatLogo;
   public homepage = 'https://unisat.io';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
   public unisat: Unisat;
