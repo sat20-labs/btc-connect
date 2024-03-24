@@ -61,6 +61,7 @@ export const WalletConnectReact = ({
       await connect();
       if (btcWallet) {
         onConnectSuccess?.(btcWallet);
+        setVisible(false);
       }
     } catch (error) {
       onConnectError?.(error);

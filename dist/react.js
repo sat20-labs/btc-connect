@@ -709,6 +709,7 @@ var WalletConnectReact = ({
       await connect2();
       if (btcWallet) {
         onConnectSuccess?.(btcWallet);
+        setVisible(false);
       }
     } catch (error) {
       onConnectError?.(error);
