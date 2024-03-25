@@ -130,7 +130,7 @@ export const WalletConnectReact = ({
         <>
           <button
             onClick={handleConnect}
-            className={`bg-clip-text text-transparent border  rounded-xl h-10 px-4 hover:border-yellow-500 ${
+            className={`bg-clip-text text-transparent border  rounded-xl h-10 px-4 leading-none hover:border-yellow-500 ${
               theme === 'dark'
                 ? 'bg-gradient-to-r from-pink-500 to-violet-500 border-gray-600'
                 : 'bg-gradient-to-r from-blue-500 to-green-500 border-gray-300'
@@ -154,7 +154,7 @@ export const WalletConnectReact = ({
       ) : (
         <button
           onClick={handlerDisconnect}
-          className={`bg-clip-text text-transparent border border-gray-300 rounded-xl h-10 px-4 hover:border-yellow-500 flex justify-center items-center ${
+          className={`bg-clip-text text-transparent border border-gray-300 rounded-xl leading-none h-10 px-4 hover:border-yellow-500 flex justify-center items-center ${
             theme === 'dark'
               ? 'bg-gradient-to-r from-pink-500 to-violet-500'
               : 'bg-gradient-to-r from-blue-500 to-green-500'
