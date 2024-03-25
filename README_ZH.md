@@ -2,6 +2,8 @@
   <a href="https://github.com/IceHugh/btc-connect/blob/main/README_ZH.md">英文</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/IceHugh/btc-connect/blob/main/doc.md">文档</a>
+  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
+  <a href="https://stackblitz.com/edit/btc-connect-example?file=src%2FApp.tsx">Example</a>
   <br />
 </div>
 
