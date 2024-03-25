@@ -13,12 +13,14 @@ export interface WalletConnectReactProps {
   ui?: {
     connectClass?: string;
     disconnectClass?: string;
+    modalClass?: string;
+    modalZIndex?: number;
   };
   text?: {
     connectText?: string;
     disconnectText?: string;
     modalTitle?: string;
-  },
+  };
   onConnectSuccess?: (btcWallet: BtcWalletConnect) => void;
   onConnectError?: (error: any) => void;
   onDisconnectSuccess?: () => void;
@@ -29,8 +31,17 @@ export interface WalletConnectReactProps {
 export const WalletConnectReact = ({
   config: { network = 'livenet', defaultConnectorId = 'unisat' } = {},
   theme = 'dark',
-  ui: { connectClass = '', disconnectClass = '' } = {},
-  text: { connectText = 'Connect', disconnectText = 'Disconnect', modalTitle = 'Select Wallet' } = {},
+  ui: {
+    connectClass = '',
+    disconnectClass = '',
+    modalClass = '',
+    modalZIndex = 100,
+  } = {},
+  text: {
+    connectText = 'Connect',
+    disconnectText = 'Disconnect',
+    modalTitle = 'Select Wallet',
+  } = {},
   onConnectSuccess,
   onConnectError,
   onDisconnectSuccess,
@@ -129,6 +140,8 @@ export const WalletConnectReact = ({
           </button>
           <WalletSelectModal
             theme={theme}
+            className={modalClass}
+            zIndex={modalZIndex}
             title={modalTitle}
             onClose={() => setModalVisible(false)}
             visible={modalVisible}

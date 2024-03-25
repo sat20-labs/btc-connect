@@ -327,6 +327,8 @@ export interface WalletConnectReactProps {
 	ui?: {
 		connectClass?: string;
 		disconnectClass?: string;
+		modalClass?: string;
+		modalZIndex?: number;
 	};
 	text?: {
 		connectText?: string;
@@ -339,7 +341,7 @@ export interface WalletConnectReactProps {
 	onDisconnectError?: (error: any) => void;
 	children?: any;
 }
-export declare const WalletConnectReact: ({ config: { network, defaultConnectorId }, theme, ui: { connectClass, disconnectClass }, text: { connectText, disconnectText, modalTitle }, onConnectSuccess, onConnectError, onDisconnectSuccess, onDisconnectError, children, }: WalletConnectReactProps) => React.JSX.Element;
+export declare const WalletConnectReact: ({ config: { network, defaultConnectorId }, theme, ui: { connectClass, disconnectClass, modalClass, modalZIndex, }, text: { connectText, disconnectText, modalTitle, }, onConnectSuccess, onConnectError, onDisconnectSuccess, onDisconnectError, children, }: WalletConnectReactProps) => React.JSX.Element;
 export type WalletState = {
 	btcWallet?: BtcWalletConnect;
 	balance: Balance;
