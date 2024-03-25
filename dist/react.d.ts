@@ -266,7 +266,7 @@ declare class OkxConnector extends BtcConnector {
 	readonly logo: string;
 	homepage: string;
 	banance: Balance;
-	okxwallet: OkxWallet;
+	okxwallet?: OkxWallet;
 	constructor(network: WalletNetwork);
 	on(event: "accountsChanged" | "accountChanged", handler: any): void;
 	connect(): Promise<boolean>;
@@ -347,6 +347,7 @@ export type WalletState = {
 	address: string;
 	connected: boolean;
 	initStatus: boolean;
+	modalVisible: boolean;
 	network: BtcWalletNetwork;
 	connectorId?: BtcConnectorId;
 	localConnectorId?: BtcConnectorId;
@@ -366,6 +367,7 @@ export type WalletActions = {
 	disconnect: () => void;
 	switchConnector: (id: BtcConnectorId) => void;
 	switchNetwork: () => void;
+	setModalVisible: (visible: boolean) => void;
 };
 export type WalletStore = WalletState & WalletActions;
 export declare const useReactWalletStore: import("zustand").UseBoundStore<Omit<import("zustand").StoreApi<WalletStore>, "setState"> & {

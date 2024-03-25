@@ -224,18 +224,18 @@ export class OkxConnector extends BtcConnector {
   public homepage: string =
     'https://www.okx.com/web3/build/docs/sdks/chains/bitcoin/provider';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
-  public okxwallet: OkxWallet;
+  public okxwallet?: OkxWallet;
 
   constructor(network: WalletNetwork) {
     super(network);
     this.okxwallet =
       network === 'testnet'
-        ? window.okxwallet.bitcoinTestnet
-        : window.okxwallet.bitcoin;
+        ? window.okxwallet?.bitcoinTestnet
+        : window.okxwallet?.bitcoin;
   }
   on(event: 'accountsChanged' | 'accountChanged', handler: any) {
     if (this.network === 'livenet') {
-      this.okxwallet.on(event, handler);
+      this.okxwallet?.on(event, handler);
     }
   }
   async connect(): Promise<boolean> {
@@ -257,6 +257,9 @@ export class OkxConnector extends BtcConnector {
   }
   async getCurrentInfo() {
     if (this.network === 'livenet') {
+      if (!this.okxwallet) {
+        throw new Error('OkxWallet not installed');
+      }
       const accounts = await this.okxwallet.getAccounts();
       if (accounts.length) {
         this.address = accounts[0];
@@ -282,6 +285,9 @@ export class OkxConnector extends BtcConnector {
     if (this.network !== 'livenet') {
       throw new Error("Can't get accounts on testnet");
     }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
     return this.okxwallet.getAccounts();
   }
   async getNetwork(): Promise<WalletNetwork> {
@@ -291,11 +297,17 @@ export class OkxConnector extends BtcConnector {
     if (this.network !== 'livenet') {
       throw new Error("Can't get accounts on testnet");
     }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
     return this.okxwallet.getPublicKey();
   }
   async getBalance() {
     if (this.network !== 'livenet') {
       throw new Error("Can't get accounts on testnet");
+    }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
     }
     return this.okxwallet.getBalance();
   }
@@ -303,6 +315,9 @@ export class OkxConnector extends BtcConnector {
   async sendToAddress(toAddress: string, amount: number) {
     if (this.network !== 'livenet') {
       throw new Error("Can't get accounts on testnet");
+    }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
     }
     return this.okxwallet?.sendBitcoin(toAddress, amount);
   }
@@ -316,23 +331,38 @@ export class OkxConnector extends BtcConnector {
   }
 
   async signPsbt(psbtHex: string, options?: any) {
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
     return this.okxwallet.signPsbt(psbtHex, options);
   }
   async signMessage(message: string) {
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
     return this.okxwallet.signMessage(message);
   }
   async signPsbts(psbtHexs: string[], options?: any) {
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
     return this.okxwallet.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
     if (this.network !== 'livenet') {
       throw new Error("Can't get accounts on testnet");
     }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
     return this.okxwallet.pushTx(rawTx);
   }
   async pushPsbt(psbtHex: string) {
     if (this.network !== 'livenet') {
       throw new Error("Can't get accounts on testnet");
+    }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
     }
     return this.okxwallet.pushPsbt(psbtHex);
   }

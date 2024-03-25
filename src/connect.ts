@@ -98,9 +98,6 @@ class BtcWalletConnect {
     }
   }
   async check() {
-    if (!this.connector) {
-      throw new Error('Connector not found');
-    }
     if (this.disConnectStatus) {
       return false;
     }

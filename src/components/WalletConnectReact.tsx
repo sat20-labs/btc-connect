@@ -37,10 +37,10 @@ export const WalletConnectReact = ({
   onDisconnectError,
   children,
 }: WalletConnectReactProps) => {
-  const [visible, setVisible] = useState(false);
   const {
     connect,
-    check,
+    modalVisible,
+    setModalVisible,
     connectors,
     connected,
     address,
@@ -52,7 +52,7 @@ export const WalletConnectReact = ({
   } = useReactWalletStore((state) => state);
 
   const handleConnect = () => {
-    setVisible(true);
+    setModalVisible(true);
   };
 
   const walletSelect = async (id: BtcConnectorId) => {
@@ -61,7 +61,7 @@ export const WalletConnectReact = ({
       await connect();
       if (btcWallet) {
         onConnectSuccess?.(btcWallet);
-        setVisible(false);
+        setModalVisible(false);
       }
     } catch (error) {
       onConnectError?.(error);
@@ -130,8 +130,8 @@ export const WalletConnectReact = ({
           <WalletSelectModal
             theme={theme}
             title={modalTitle}
-            onClose={() => setVisible(false)}
-            visible={visible}
+            onClose={() => setModalVisible(false)}
+            visible={modalVisible}
             wallets={wallets}
             onClick={walletSelect}
           />

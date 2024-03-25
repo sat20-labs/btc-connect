@@ -115,9 +115,15 @@ export class UnisatConnector extends BtcConnector {
     this.unisat = window.unisat;
   }
   on(event: 'accountsChanged' | 'networkChanged', handler: any) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     this.unisat.on(event, handler);
   }
   removeListener(event: 'accountsChanged' | 'networkChanged', handler: any) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     this.unisat.removeListener(event, handler);
   }
   async connect(): Promise<boolean> {
@@ -133,6 +139,9 @@ export class UnisatConnector extends BtcConnector {
     return this.connected;
   }
   async getCurrentInfo() {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     const accounts = await this.unisat.getAccounts();
     if (accounts.length) {
       this.address = accounts[0];
@@ -154,38 +163,68 @@ export class UnisatConnector extends BtcConnector {
     this.banance = { confirmed: 0, unconfirmed: 0, total: 0 };
   }
   async getAccounts(): Promise<string[]> {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.getAccounts();
   }
   async sendToAddress(toAddress: string, amount: number) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat?.sendBitcoin(toAddress, amount);
   }
 
   async switchNetwork(network: WalletNetwork) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     await this.unisat.switchNetwork(
       getUnisatNetwork(network) as UnisatWalletTypes.Network
     );
   }
 
   async getPublicKey() {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.getPublicKey();
   }
 
   async getBalance() {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.getBalance();
   }
   async signPsbt(psbtHex: string, options?: any) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.signPsbt(psbtHex, options);
   }
   async signMessage(message: string) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.signMessage(message);
   }
   async signPsbts(psbtHexs: string[], options?: any) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.pushTx({ rawtx: rawTx });
   }
   async pushPsbt(psbtHex: string) {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
     return this.unisat.pushPsbt(psbtHex);
   }
 }

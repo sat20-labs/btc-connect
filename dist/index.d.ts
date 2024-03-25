@@ -264,7 +264,7 @@ declare class OkxConnector extends BtcConnector {
 	readonly logo: string;
 	homepage: string;
 	banance: Balance;
-	okxwallet: OkxWallet;
+	okxwallet?: OkxWallet;
 	constructor(network: WalletNetwork);
 	on(event: "accountsChanged" | "accountChanged", handler: any): void;
 	connect(): Promise<boolean>;

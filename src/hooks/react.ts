@@ -21,6 +21,7 @@ export type WalletState = {
   address: string;
   connected: boolean;
   initStatus: boolean;
+  modalVisible: boolean;
   network: BtcWalletNetwork;
   connectorId?: BtcConnectorId;
   localConnectorId?: BtcConnectorId;
@@ -41,12 +42,14 @@ export type WalletActions = {
   disconnect: () => void;
   switchConnector: (id: BtcConnectorId) => void;
   switchNetwork: () => void;
+  setModalVisible: (visible: boolean) => void;
 };
 
 export type WalletStore = WalletState & WalletActions;
 
 const defaultInitState: WalletState = {
   initStatus: false,
+  modalVisible: false,
   balance: { confirmed: 0, unconfirmed: 0, total: 0 },
   connectors: [],
   publicKey: '',
@@ -58,6 +61,9 @@ const defaultInitState: WalletState = {
 export const useReactWalletStore = create<WalletStore>()(
   devtools((set, get) => ({
     ...defaultInitState,
+    setModalVisible: (visible: boolean) => {
+      set(() => ({ modalVisible: visible }));
+    },
     init: (config: BtcWalletConnectOptions = {}) => {
       try {
         const { network = 'livenet', defaultConnectorId = 'unisat' } = config;
