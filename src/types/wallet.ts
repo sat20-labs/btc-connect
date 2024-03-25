@@ -6,8 +6,12 @@ export type BtcWalletNetwork = 'livenet' | 'testnet';
 export type BtcConnectorId = 'unisat' | 'okx';
 
 export type AccountsChangedEvent = (
-  event: 'networkChanged',
+  event: 'accountsChanged',
   handler: (accounts: Array<string>) => void
+) => void;
+export type AccountChangedEvent = (
+  event: 'accountChanged',
+  handler: (account: any) => void
 ) => void;
 
 export type NetworkChangedEvent = (

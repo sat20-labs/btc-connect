@@ -9,7 +9,6 @@ import {
   MessageType,
 } from './types';
 
-
 export type Connector = UnisatConnector | OkxConnector;
 
 export interface BtcConnectors {
@@ -51,7 +50,8 @@ class BtcWalletConnect {
     this.localConnectorId =
       (localStorage.getItem(this.local_storage_key) as BtcConnectorId) ||
       undefined;
-    this.disConnectStatus = localStorage.getItem(this.local_disconnect_key) == '1';
+    this.disConnectStatus =
+      localStorage.getItem(this.local_disconnect_key) == '1';
     this.connectorId = defaultConnectorId;
     this.connector = this.connectors.find(
       (c) => c.id === defaultConnectorId && c.installed
@@ -199,18 +199,26 @@ class BtcWalletConnect {
     if (this.connector instanceof UnisatConnector) {
       this.connector.on(event as 'networkChanged' | 'accountsChanged', handler);
     } else {
-      this.connector.on(event as 'accountsChanged' | 'accountChanged', handler);
+      this.connector.on(
+        event as 'accountsChanged' | 'accountChanged' | 'accountsChanged',
+        handler
+      );
     }
   };
   removeListener: NetworkChangedEvent | AccountsChangedEvent = (
-    event: 'networkChanged' | 'accountsChanged',
+    event: 'networkChanged' | 'accountsChanged' | 'accountChanged',
     handler: any
   ) => {
     if (!this.connector) {
       throw new Error('Connector not found');
     }
     if (this.connector instanceof UnisatConnector) {
-      this.connector.removeListener(event, handler);
+      this.connector.removeListener(
+        event as 'networkChanged' | 'accountsChanged',
+        handler
+      );
+    } else if (this.connector instanceof OkxConnector) {
+      return;
     }
   };
 }
