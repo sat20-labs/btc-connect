@@ -89,11 +89,14 @@ class BtcWalletConnect {
       throw new Error('Connector not found');
     }
     try {
-      await this.connector.getCurrentInfo();
-      this.address = this.connector.address;
-      this.publicKey = this.connector.publicKey;
-      this.balance = this.connector.banance;
-      this.connected = this.connector.connected;
+      if (this.connector.getCurrentInfo) {
+        await this.connector.getCurrentInfo();
+        this.address = this.connector.address;
+        this.publicKey = this.connector.publicKey;
+        this.network = this.connector.network;
+        this.balance = this.connector.banance;
+        this.connected = this.connector.connected;
+      }
     } catch (error) {
       throw error;
     }
