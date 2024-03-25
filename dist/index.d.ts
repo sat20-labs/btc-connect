@@ -12,8 +12,6 @@ export interface BtcWalletConnectOptions {
 }
 export type BtcWalletNetwork = "livenet" | "testnet";
 export type BtcConnectorId = "unisat" | "okx";
-export type AccountsChangedEvent = (event: "accountsChanged", handler: (accounts: Array<string>) => void) => void;
-export type NetworkChangedEvent = (event: "networkChanged", handler: (network: BtcWalletNetwork) => void) => void;
 export type MessageType = "ecdsa" | "bip322-simple";
 export type Address = string;
 declare abstract class BtcConnector {
@@ -316,8 +314,8 @@ declare class BtcWalletConnect {
 	signPsbts(psbtHexs: string[], options?: any): Promise<string[]>;
 	pushTx(rawTx: string): Promise<string>;
 	pushPsbt(psbtHex: string): Promise<string>;
-	on: NetworkChangedEvent | AccountsChangedEvent;
-	removeListener: NetworkChangedEvent | AccountsChangedEvent;
+	on(event: "networkChanged" | "accountsChanged" | "accountChanged", handler: any): void;
+	removeListener(event: "networkChanged" | "accountsChanged" | "accountChanged", handler: any): void;
 }
 
 export {

@@ -7,6 +7,7 @@ import {
   NetworkChangedEvent,
   AccountsChangedEvent,
   MessageType,
+  AccountChangedEvent,
 } from './types';
 
 export type Connector = UnisatConnector | OkxConnector;
@@ -189,10 +190,10 @@ class BtcWalletConnect {
     }
     return this.connector.pushPsbt(psbtHex);
   }
-  on: NetworkChangedEvent | AccountsChangedEvent = (
+  on(
     event: 'networkChanged' | 'accountsChanged' | 'accountChanged',
     handler: any
-  ) => {
+  ) {
     if (!this.connector) {
       throw new Error('Connector not found');
     }
@@ -204,11 +205,11 @@ class BtcWalletConnect {
         handler
       );
     }
-  };
-  removeListener: NetworkChangedEvent | AccountsChangedEvent = (
+  }
+  removeListener(
     event: 'networkChanged' | 'accountsChanged' | 'accountChanged',
     handler: any
-  ) => {
+  ) {
     if (!this.connector) {
       throw new Error('Connector not found');
     }
@@ -220,7 +221,7 @@ class BtcWalletConnect {
     } else if (this.connector instanceof OkxConnector) {
       return;
     }
-  };
+  }
 }
 
 export default BtcWalletConnect;
