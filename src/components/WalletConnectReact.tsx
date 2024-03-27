@@ -71,7 +71,7 @@ export const WalletConnectReact = ({
     try {
       await connect();
       if (btcWallet) {
-        onConnectSuccess?.(btcWallet);
+        await onConnectSuccess?.(btcWallet);
         setModalVisible(false);
       }
     } catch (error) {
@@ -160,7 +160,7 @@ export const WalletConnectReact = ({
               : 'bg-gradient-to-r from-blue-500 to-green-500'
           } ${disconnectClass}`}
         >
-          <span className="mr-1">{hideStr(address, 4, '***')}</span>
+          <span className='mr-1'>{hideStr(address, 4, '***')}</span>
           <ExitIcon
             className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}
           />
