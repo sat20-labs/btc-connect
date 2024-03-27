@@ -80,8 +80,8 @@ export const WalletConnectReact = ({
   };
   const handlerDisconnect = async () => {
     try {
+      await onDisconnectSuccess?.();
       await disconnect();
-      onDisconnectSuccess?.();
     } catch (error) {
       console.error(error);
       onDisconnectError?.(error);
