@@ -1,5 +1,4 @@
-
-import { WalletNetwork } from "../types";
+import { WalletNetwork } from '../types';
 type Address = string;
 
 export abstract class BtcConnector {
@@ -21,6 +20,7 @@ export abstract class BtcConnector {
   publicKey: string | undefined;
 
   network: WalletNetwork;
+  networks: WalletNetwork[] = ['livenet', 'testnet'];
 
   constructor(network: WalletNetwork) {
     this.network = network;
@@ -31,7 +31,6 @@ export abstract class BtcConnector {
   abstract sendToAddress(toAddress: string, amount: number): Promise<string>;
 
   abstract signPsbt(psbtHex: string, options?: any): Promise<string>;
-
 
   disconnect() {
     this.address = undefined;

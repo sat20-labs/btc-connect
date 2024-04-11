@@ -75,6 +75,7 @@ export const WalletConnectReact = ({
         setModalVisible(false);
       }
     } catch (error) {
+      console.error(error);
       onConnectError?.(error);
     }
   };
@@ -97,24 +98,6 @@ export const WalletConnectReact = ({
       })) || []
     );
   }, [connectors]);
-
-  // useEffect(() => {
-  //   if (initStatus) {
-  //     // check();
-  //   }
-  // }, [initStatus]);
-
-  // useEffect(() => {
-  //   console.log('btc connected', connected);
-  //   if (connected) {
-  //     // btcWallet?.on("accountChanged", check);
-  //     btcWallet?.on('networkChanged', check);
-  //   }
-  //   return () => {
-  //     // btcWallet?.removeListener("accountChanged", check);
-  //     btcWallet?.removeListener('networkChanged', check);
-  //   };
-  // }, [connected]);
 
   useEffect(() => {
     init({ network, defaultConnectorId });

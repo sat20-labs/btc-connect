@@ -9,7 +9,7 @@ export namespace OkxWalletTypes {
   }
   export type OnEvent = (
     event: 'accountsChanged' | 'accountChanged',
-    handler: (accounts: Array<string> | Array<AddressInfo>) => void
+    handler: (accounts: Array<string> | Array<AddressInfo>) => void,
   ) => void;
 
   export type Inscription = {
@@ -99,19 +99,19 @@ export type OkxWallet = {
   getBalance: () => Promise<Balance>;
   getInscriptions: (
     cursor: number,
-    size: number
+    size: number,
   ) => Promise<OkxWalletTypes.GetInscriptionsResult>;
   sendBitcoin: (
     toAddress: string,
     satoshis: number,
     options?: {
       feeRate: number;
-    }
+    },
   ) => Promise<string>;
   sendInscription: (
     address: string,
     inscriptionId: string,
-    options?: { feeRate: number }
+    options?: { feeRate: number },
   ) => Promise<string>;
   transferNft: ({
     from,
@@ -126,7 +126,7 @@ export type OkxWallet = {
   }: OkxWalletTypes.SendProps) => Promise<OkxWalletTypes.SendResult>;
   signMessage: (
     message: string,
-    type?: 'ecdsa' | 'bip322-simple'
+    type?: 'ecdsa' | 'bip322-simple',
   ) => Promise<string>;
   pushTx: (rawtx: string) => Promise<string>;
   splitUtxo: ({
@@ -155,7 +155,7 @@ export type OkxWallet = {
         sighashTypes?: number[];
         disableTweakSigner?: boolean;
       }[];
-    }
+    },
   ) => Promise<string>;
   signPsbts: (
     psbtHexs: string[],
@@ -168,7 +168,7 @@ export type OkxWallet = {
         sighashTypes?: number[];
         disableTweakSigner?: boolean;
       };
-    }[]
+    }[],
   ) => Promise<string[]>;
   pushPsbt: (psbtHex: string) => Promise<string>;
   on: OkxWalletTypes.OnEvent;
@@ -178,7 +178,7 @@ export interface OkxTestnetWallet {
   connect: () => Promise<OkxWalletTypes.ConnectResult>;
   signMessage: (
     message: string,
-    type?: 'ecdsa' | 'bip322-simple'
+    type?: 'ecdsa' | 'bip322-simple',
   ) => Promise<string>;
   signPsbt: (
     psbtHex: string,
@@ -191,7 +191,7 @@ export interface OkxTestnetWallet {
         sighashTypes?: number[];
         disableTweakSigner?: boolean;
       }[];
-    }
+    },
   ) => Promise<string>;
   signPsbts: (
     psbtHexs: string[],
@@ -204,7 +204,7 @@ export interface OkxTestnetWallet {
         sighashTypes?: number[];
         disableTweakSigner?: boolean;
       };
-    }[]
+    }[],
   ) => Promise<string[]>;
 }
 
@@ -221,17 +221,16 @@ export class OkxConnector extends BtcConnector {
   readonly id = 'okx';
   readonly name: string = 'OKX';
   readonly logo: string = okxLogo;
+  readonly networks: WalletNetwork[] = ['livenet'];
   public homepage: string =
     'https://www.okx.com/web3/build/docs/sdks/chains/bitcoin/provider';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
-  public okxwallet?: OkxWallet;
+  public okxwallet: OkxWallet;
 
   constructor(network: WalletNetwork) {
     super(network);
-    this.okxwallet =
-      network === 'testnet'
-        ? window.okxwallet?.bitcoinTestnet
-        : window.okxwallet?.bitcoin;
+    this.network = 'livenet';
+    this.okxwallet = window.okxwallet?.bitcoin;
   }
   on(event: 'accountsChanged' | 'accountChanged', handler: any) {
     if (this.network === 'livenet') {
@@ -323,11 +322,11 @@ export class OkxConnector extends BtcConnector {
   }
 
   async switchNetwork(network: WalletNetwork) {
-    this.network = network;
-    this.okxwallet =
-      network === 'testnet'
-        ? window.okxwallet.bitcoinTestnet
-        : window.okxwallet.bitcoin;
+    this.network = 'livenet';
+    // this.okxwallet =
+    //   network === 'testnet'
+    //     ? window.okxwallet.bitcoinTestnet
+    //     : window.okxwallet.bitcoin;
   }
 
   async signPsbt(psbtHex: string, options?: any) {

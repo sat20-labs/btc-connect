@@ -28,6 +28,7 @@ declare abstract class BtcConnector {
 	address: Address | undefined;
 	publicKey: string | undefined;
 	network: WalletNetwork;
+	networks: WalletNetwork[];
 	constructor(network: WalletNetwork);
 	abstract connect(): Promise<boolean>;
 	abstract sendToAddress(toAddress: string, amount: number): Promise<string>;
@@ -109,6 +110,7 @@ declare class UnisatConnector extends BtcConnector {
 	readonly id = "unisat";
 	readonly name: string;
 	readonly logo: string;
+	readonly networks: WalletNetwork[];
 	homepage: string;
 	banance: Balance;
 	unisat: Unisat;
@@ -116,6 +118,7 @@ declare class UnisatConnector extends BtcConnector {
 	on(event: "accountsChanged" | "networkChanged", handler: any): void;
 	removeListener(event: "accountsChanged" | "networkChanged", handler: any): void;
 	connect(): Promise<boolean>;
+	requestAccounts(): Promise<string[]>;
 	getCurrentInfo(): Promise<void>;
 	disconnect(): Promise<void>;
 	getAccounts(): Promise<string[]>;
@@ -260,9 +263,10 @@ declare class OkxConnector extends BtcConnector {
 	readonly id = "okx";
 	readonly name: string;
 	readonly logo: string;
+	readonly networks: WalletNetwork[];
 	homepage: string;
 	banance: Balance;
-	okxwallet?: OkxWallet;
+	okxwallet: OkxWallet;
 	constructor(network: WalletNetwork);
 	on(event: "accountsChanged" | "accountChanged", handler: any): void;
 	connect(): Promise<boolean>;

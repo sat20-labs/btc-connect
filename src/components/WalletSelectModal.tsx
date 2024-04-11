@@ -29,6 +29,9 @@ export const WalletSelectModal = ({
   const clickHandler = async (id: BtcConnectorId, installed: boolean) => {
     if (loading || !installed) return;
     setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
     try {
       await onClick?.(id);
     } catch (error) {
@@ -38,12 +41,11 @@ export const WalletSelectModal = ({
     }
   };
   useEffect(() => {
-    console.log('WalletSelectModal mounted');
     setIsBrowser(true);
   }, []);
 
   const modalContent = visible ? (
-    <div className="fixed top-0 left-0 w-screen h-screen" style={{ zIndex }}>
+    <div className='fixed top-0 left-0 w-screen h-screen' style={{ zIndex }}>
       <div
         className={`bg-black ${
           theme === 'dark' ? 'bg-opacity-70' : 'bg-opacity-30'
@@ -63,19 +65,19 @@ export const WalletSelectModal = ({
               : 'border-b border-gray-200'
           }`}
         >
-          <h2 className="text-xl font-bold text-center">{title}</h2>
+          <h2 className='text-xl font-bold text-center'>{title}</h2>
           <button
             onClick={() => onClose?.()}
-            className="absolute top-1/2 -translate-y-1/2 right-4"
+            className='absolute top-1/2 -translate-y-1/2 right-4'
           >
             <img
               src={closeIcon}
-              alt="close"
+              alt='close'
               className={`w-6 h-6 ${theme === 'dark' ? 'invert' : ''}`}
             />
           </button>
         </div>
-        <div className="p-4 flex flex-col gap-2">
+        <div className='p-4 flex flex-col gap-2'>
           {wallets.map((wallet: any) => (
             <div
               key={wallet.id}
@@ -87,23 +89,23 @@ export const WalletSelectModal = ({
               }`}
             >
               {loading && (
-                <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center">
+                <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center'>
                   <img
                     src={loadingIcon}
-                    alt="loading"
-                    className="w-6 h-6 animate-spin"
+                    alt='loading'
+                    className='w-6 h-6 animate-spin'
                   />
                 </div>
               )}
-              <div className="flex items-center flex-1">
+              <div className='flex items-center flex-1'>
                 <img
                   src={wallet.logo}
                   alt={wallet.name}
-                  className="w-8 h-8 mr-2"
+                  className='w-8 h-8 mr-2'
                 />
-                <span className="flex-1">{wallet.name}</span>
+                <span className='flex-1'>{wallet.name}</span>
               </div>
-              <div className="text-xs text-orange-600">
+              <div className='text-xs text-orange-600'>
                 {!wallet.installed && 'Not Installed'}
               </div>
             </div>

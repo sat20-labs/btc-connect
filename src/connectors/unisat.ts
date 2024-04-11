@@ -14,7 +14,7 @@ const getUnisatNetwork = (network: WalletNetwork): WalletNetwork => {
 export namespace UnisatWalletTypes {
   export type AccountsChangedEvent = (
     event: 'accountsChanged' | 'networkChanged',
-    handler: (accounts: Array<string> | string) => void
+    handler: (accounts: Array<string> | string) => void,
   ) => void;
 
   export type Inscription = {
@@ -45,12 +45,12 @@ export type Unisat = {
   removeListener: UnisatWalletTypes.AccountsChangedEvent;
   getInscriptions: (
     cursor: number,
-    size: number
+    size: number,
   ) => Promise<UnisatWalletTypes.GetInscriptionsResult>;
   sendInscription: (
     address: string,
     inscriptionId: string,
-    options?: { feeRate: number }
+    options?: { feeRate: number },
   ) => Promise<UnisatWalletTypes.SendInscriptionsResult>;
   switchNetwork: (network: 'livenet' | 'testnet') => Promise<void>;
   getNetwork: () => Promise<UnisatWalletTypes.Network>;
@@ -59,13 +59,13 @@ export type Unisat = {
   sendBitcoin: (
     address: string,
     atomicAmount: number,
-    options?: { feeRate: number }
+    options?: { feeRate: number },
   ) => Promise<string>;
   pushTx: ({ rawtx }: { rawtx: string }) => Promise<string>;
   pushPsbt: (psbtHex: string) => Promise<string>;
   signMessage: (
     message: string,
-    type?: 'ecdsa' | 'bip322-simple'
+    type?: 'ecdsa' | 'bip322-simple',
   ) => Promise<string>;
   signPsbt: (
     psbtHex: string,
@@ -78,7 +78,7 @@ export type Unisat = {
         sighashTypes?: number[];
         disableTweakSigner?: boolean;
       }[];
-    }
+    },
   ) => Promise<string>;
 
   signPsbts: (
@@ -92,7 +92,7 @@ export type Unisat = {
         sighashTypes?: number[];
         disableTweakSigner?: boolean;
       };
-    }[]
+    }[],
   ) => Promise<string[]>;
 };
 
@@ -106,6 +106,7 @@ export class UnisatConnector extends BtcConnector {
   readonly id = 'unisat';
   readonly name: string = 'Unisat';
   readonly logo: string = unisatLogo;
+  readonly networks: WalletNetwork[] = ['livenet', 'testnet'];
   public homepage = 'https://unisat.io';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
   public unisat: Unisat;
@@ -132,11 +133,19 @@ export class UnisatConnector extends BtcConnector {
       if (!this.unisat) {
         throw new Error('Unisat not installed');
       }
+      await this.requestAccounts();
       await this.getCurrentInfo();
+      this.connected = true;
+      return true;
     } catch (error) {
       throw error;
     }
-    return this.connected;
+  }
+  async requestAccounts() {
+    if (!this.unisat) {
+      throw new Error('Unisat not installed');
+    }
+    return this.unisat.requestAccounts();
   }
   async getCurrentInfo() {
     if (!this.unisat) {
@@ -180,7 +189,7 @@ export class UnisatConnector extends BtcConnector {
       throw new Error('Unisat not installed');
     }
     await this.unisat.switchNetwork(
-      getUnisatNetwork(network) as UnisatWalletTypes.Network
+      getUnisatNetwork(network) as UnisatWalletTypes.Network,
     );
   }
 
