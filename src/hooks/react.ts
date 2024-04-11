@@ -81,7 +81,6 @@ export const useReactWalletStore = create<WalletStore>()(
             logo: con.instance.logo,
             connector: con.instance,
             installed: con.installed,
-
           })),
           initStatus: true,
         }));
@@ -180,6 +179,7 @@ export const useReactWalletStore = create<WalletStore>()(
         }
         const network = get().network === 'testnet' ? 'livenet' : 'testnet';
         await btcWallet.switchNetwork(network as any);
+        const newNetwork = await btcWallet.getNetwork();
         const address = btcWallet.address;
         const publicKey = btcWallet.publicKey;
         const balance = btcWallet.balance;
@@ -191,12 +191,12 @@ export const useReactWalletStore = create<WalletStore>()(
           balance,
           connected,
           localConnectorId,
-          network,
+          network: newNetwork,
         }));
       } catch (error) {
         console.error('Error checking Wallet', error);
         throw error;
       }
     },
-  }))
+  })),
 );
