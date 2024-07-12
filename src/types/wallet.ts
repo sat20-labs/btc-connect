@@ -3,7 +3,7 @@ export interface BtcWalletConnectOptions {
   defaultConnectorId?: BtcConnectorId;
 }
 export type BtcWalletNetwork = 'livenet' | 'testnet';
-export type BtcConnectorId = 'unisat' | 'okx';
+export type BtcConnectorId = 'sat20' | 'unisat' | 'okx';
 
 export type AccountsChangedEvent = (
   event: 'accountsChanged',

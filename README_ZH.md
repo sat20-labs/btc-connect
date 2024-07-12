@@ -1,26 +1,26 @@
 <div align="center">
-  <a href="https://github.com/IceHugh/btc-connect/blob/main/README_ZH.md">英文</a>
+  <a href="https://github.com/sat20-labs/btc-connect/blob/main/README_ZH.md">英文</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://github.com/IceHugh/btc-connect/blob/main/doc.md">文档</a>
+  <a href="https://github.com/sat20-labs/btc-connect/blob/main/doc.md">文档</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://stackblitz.com/edit/btc-connect-example?file=src%2FApp.tsx">Example</a>
   <br />
 </div>
 
 <div align="center">
-  <img src="https://github.com/IceHugh/btc-connect/blob/main/images/example_black.png" width="300">
-  <img src="https://github.com/IceHugh/btc-connect/blob/main/images/example_white.png" width="300">
+  <img src="https://github.com/sat20-labs/btc-connect/blob/main/images/example_black.png" width="300">
+  <img src="https://github.com/sat20-labs/btc-connect/blob/main/images/example_white.png" width="300">
   <br />
 </div>
 
 
 # BTC Connect
 
-BTC Connect 是一个库，可以让你轻松地将比特币钱包（Unisat 和 OKX）集成到你的 Web 应用程序中。使用这个库，你可以让用户管理他们的比特币地址、发送和接收交易，并直接从你的 Web 应用程序与比特币钱包进行交互。
+BTC Connect 是一个库，可以让你轻松地将比特币钱包（sat20, Unisat 和 OKX）集成到你的 Web 应用程序中。使用这个库，你可以让用户管理他们的比特币地址、发送和接收交易，并直接从你的 Web 应用程序与比特币钱包进行交互。
 
 ## 特性
 
-- 连接流行的比特币钱包（Unisat 和 OKX）
+- 连接流行的比特币钱包（Sat20, Unisat 和 OKX）
 - 管理比特币地址并查看余额
 - 发送和接收比特币交易
 - 签署消息和 PSBT
@@ -77,7 +77,7 @@ import "btc-connect/dist/style/index.css";
 const App = () => {
   const config = {
     network: 'livenet', // 或 'testnet'
-    defaultConnectorId: 'unisat', // 或 'okx'
+    defaultConnectorId: 'sat20', // unisat 或 'okx'
   };
 
   return (

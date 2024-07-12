@@ -6,7 +6,7 @@ Let's refine the documentation by including explanations for TypeScript types li
 
 ### Key TypeScript Types
 
-- **`BtcConnectorId`**: Represents the identifier for a specific wallet connector. Common connector IDs include `"unisat"` and `"okx"`, which are used to specify the underlying service or platform for wallet operations.
+- **`BtcConnectorId`**: Represents the identifier for a specific wallet connector. Common connector IDs include `"sat20"`, `"unisat"` and `"okx"`, which are used to specify the underlying service or platform for wallet operations.
 
 - **`BtcWalletNetwork`**: Specifies the blockchain network type the wallet operates on. Possible values include `"livenet"` for the main network where real transactions occur, and `"testnet"` for a sandbox environment used for testing purposes.
 
@@ -25,7 +25,7 @@ Initialization:
 ```typescript
 const walletOptions: BtcWalletConnectOptions = {
   network: "livenet",
-  defaultConnectorId: "unisat"
+  defaultConnectorId: "sat20"
 };
 const wallet = new BtcWalletConnect(walletOptions);
 ```
@@ -143,7 +143,7 @@ This document describes the structure of the wallet state used within a cryptocu
 - `BtcWalletConnect`: Represents the main class for wallet connectivity.
 - `Balance`: An object containing numeric fields for `confirmed`, `unconfirmed`, and `total` balances.
 - `BtcWalletNetwork`: Enumerates the blockchain networks supported, such as `"livenet"` and `"testnet"`.
-- `BtcConnectorId`: Identifies connectors by ID, such as `"unisat"` or `"okx"`.
+- `BtcConnectorId`: Identifies connectors by ID, such as  `"sat20"` or `"unisat"` or `"okx"`.
 - `Connector`: The interface for blockchain connector implementations.
 ```
 
@@ -163,7 +163,7 @@ function WalletComponent() {
   const { connect, disconnect, balance, init } = useReactWalletStore();
 
   useEffect(() => {
-    init({ network: 'livenet', defaultConnectorId: 'unisat' });
+    init({ network: 'livenet', defaultConnectorId: 'sat20' });
   }, []);
 
   return (
@@ -189,7 +189,7 @@ import { WalletConnectReact } from 'btc-connect/dist/react';
 
 const App = () => (
   <WalletConnectReact
-    config={{ network: "livenet", defaultConnectorId: "unisat" }}
+    config={{ network: "livenet", defaultConnectorId: "sat20" }}
     onConnectSuccess={() => console.log("Connected")}
     onConnectError={(error) => console.log("Connection Error:", error)}
     onDisconnectSuccess={() => console.log("Disconnected")}

@@ -66,7 +66,7 @@ export const useReactWalletStore = create<WalletStore>()(
     },
     init: (config: BtcWalletConnectOptions = {}) => {
       try {
-        const { network = 'livenet', defaultConnectorId = 'unisat' } = config;
+        const { network = 'livenet', defaultConnectorId = 'sat20' } = config;
         const btcWallet = new BtcWalletConnect(config);
         window.btcWallet = btcWallet;
         set(() => ({

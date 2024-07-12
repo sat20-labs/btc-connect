@@ -16,11 +16,11 @@
 
 # BTC Connect
 
-BTC Connect is a library that allows you to easily integrate Bitcoin wallets (Unisat and OKX) into your web application. With this library, you can enable your users to manage their Bitcoin addresses, send and receive transactions, and interact with Bitcoin wallets directly from your web app.
+BTC Connect is a library that allows you to easily integrate Bitcoin wallets (Sat20, Unisat and OKX) into your web application. With this library, you can enable your users to manage their Bitcoin addresses, send and receive transactions, and interact with Bitcoin wallets directly from your web app.
 
 ## Features
 
-- Connect to popular Bitcoin wallets (Unisat and OKX)
+- Connect to popular Bitcoin wallets (Sat20, Unisat and OKX)
 - Manage Bitcoin addresses and check balances
 - Send and receive Bitcoin transactions
 - Sign messages and PSBTs
@@ -77,7 +77,7 @@ import "btc-connect/dist/style/index.css";
 const App = () => {
   const config = {
     network: 'livenet', // or 'testnet'
-    defaultConnectorId: 'unisat', // or 'okx'
+    defaultConnectorId: 'sat20', // 'unisat' or 'okx'
   };
 
   return (
@@ -150,7 +150,7 @@ import BtcWalletConnect from 'btc-connect';
 
 const config = {
   network: 'livenet', // or 'testnet'
-  defaultConnectorId: 'unisat', // or 'okx'
+  defaultConnectorId: 'sat20', // 'unisat' or 'okx'
 };
 
 const btcWallet = new BtcWalletConnect(config);
