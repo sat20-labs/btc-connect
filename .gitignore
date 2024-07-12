@@ -115,7 +115,7 @@ out
 # Nuxt.js build / generate output
 
 .nuxt
-# dist
+dist
 
 # Gatsby files
 
@@ -173,4 +173,3 @@ out
 
 # Finder (MacOS) folder config
 .DS_Store
-
