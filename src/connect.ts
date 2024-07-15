@@ -229,6 +229,23 @@ class BtcWalletConnect {
       return;
     }
   }
+
+  addAccounts(count: number) {
+    if (!this.connector) {
+      throw new Error('Connector not found');
+    }
+
+    if (this.connector instanceof Sat20Connector) {
+      this.connector.addAccounts(count);
+    } else if (this.connector instanceof UnisatConnector) {
+      console.error("no implement");
+      return false
+    } else if (this.connector instanceof OkxConnector) {
+      console.error("no implement");
+      return false
+    }
+
+  }
 }
 
 export default BtcWalletConnect;
