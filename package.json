@@ -1,10 +1,10 @@
 {
   "name": "@sat20/btc-connect",
-  "author": "IceHugh",
+  "author": "Sat20 Labs",
   "main": "dist/index.js",
   "types": "dist/*.d.ts",
   "module": "dist/index.js",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "description": "Btc connect for sat20, unisat, okx",
   "type": "module",
   "license": "MIT",
