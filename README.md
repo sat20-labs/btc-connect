@@ -16,11 +16,11 @@
 
 # BTC Connect
 
-BTC Connect is a library that allows you to easily integrate Bitcoin wallets (Sat20, Unisat and OKX) into your web application. With this library, you can enable your users to manage their Bitcoin addresses, send and receive transactions, and interact with Bitcoin wallets directly from your web app.
+BTC Connect is a library that allows you to easily integrate Bitcoin wallets (SAT20, Unisat and OKX) into your web application. With this library, you can enable your users to manage their Bitcoin addresses, send and receive transactions, and interact with Bitcoin wallets directly from your web app.
 
 ## Features
 
-- Connect to popular Bitcoin wallets (Sat20, Unisat and OKX)
+- Connect to popular Bitcoin wallets (SAT20, Unisat and OKX)
 - Manage Bitcoin addresses and check balances
 - Send and receive Bitcoin transactions
 - Sign messages and PSBTs

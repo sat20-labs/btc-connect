@@ -38,7 +38,7 @@ export namespace Sat20WalletTypes {
 
   export type Network = 'livenet' | 'testnet';
 }
-export type Sat20 = {
+export type SAT20 = {
   requestAccounts: () => Promise<string[]>;
   getAccounts: () => Promise<string[]>;
   on: Sat20WalletTypes.AccountsChangedEvent;
@@ -99,18 +99,18 @@ export type Sat20 = {
 
 declare global {
   interface Window {
-    sat20: Sat20;
+    sat20: SAT20;
   }
 }
 
 export class Sat20Connector extends BtcConnector {
   readonly id = 'sat20';
-  readonly name: string = 'Sat20';
+  readonly name: string = 'SAT20';
   readonly logo: string = sat20Logo;
   readonly networks: WalletNetwork[] = ['livenet', 'testnet'];
   public homepage = 'https://sat20.org';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
-  public sat20: Sat20;
+  public sat20: SAT20;
 
   constructor(network: WalletNetwork) {
     super(network);
@@ -118,13 +118,13 @@ export class Sat20Connector extends BtcConnector {
   }
   on(event: 'accountsChanged' | 'networkChanged', handler: any) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     this.sat20.on(event, handler);
   }
   removeListener(event: 'accountsChanged' | 'networkChanged', handler: any) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     this.sat20.removeListener(event, handler);
   }
@@ -132,7 +132,7 @@ export class Sat20Connector extends BtcConnector {
     this.connected = false;
     try {
       if (!this.sat20) {
-        throw new Error('Sat20 not installed');
+        throw new Error('SAT20 not installed');
       }
       await this.requestAccounts();
       await this.getCurrentInfo();
@@ -144,13 +144,13 @@ export class Sat20Connector extends BtcConnector {
   }
   async requestAccounts() {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.requestAccounts();
   }
   async getCurrentInfo() {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     const accounts = await this.sat20.getAccounts();
     if (accounts.length) {
@@ -174,20 +174,20 @@ export class Sat20Connector extends BtcConnector {
   }
   async getAccounts(): Promise<string[]> {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.getAccounts();
   }
   async sendToAddress(toAddress: string, amount: number) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20?.sendBitcoin(toAddress, amount);
   }
 
   async switchNetwork(network: WalletNetwork) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     await this.sat20.switchNetwork(
       getSat20Network(network) as Sat20WalletTypes.Network,
@@ -196,51 +196,51 @@ export class Sat20Connector extends BtcConnector {
 
   async getPublicKey() {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.getPublicKey();
   }
 
   async getBalance() {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.getBalance();
   }
   async signPsbt(psbtHex: string, options?: any) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.signPsbt(psbtHex, options);
   }
   async signMessage(message: string) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.signMessage(message);
   }
   async signPsbts(psbtHexs: string[], options?: any) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.pushTx({ rawtx: rawTx });
   }
   async pushPsbt(psbtHex: string) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.pushPsbt(psbtHex);
   }
 
   async addAccounts(count: number) {
     if (!this.sat20) {
-      throw new Error('Sat20 not installed');
+      throw new Error('SAT20 not installed');
     }
     return this.sat20.addAccounts(count);
   }

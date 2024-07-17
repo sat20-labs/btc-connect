@@ -1,6 +1,6 @@
 {
   "name": "@sat20/btc-connect",
-  "author": "Sat20 Labs",
+  "author": "SAT20 Labs",
   "main": "dist/index.js",
   "types": "dist/*.d.ts",
   "module": "dist/index.js",
