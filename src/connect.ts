@@ -37,11 +37,11 @@ class BtcWalletConnect {
   }: BtcWalletConnectOptions) {
     this.network = network;
     this.connectors = [
-      {
-        id: 'sat20',
-        instance: new Sat20Connector(this.network),
-        installed: !!window.sat20,
-      },
+      // {
+      //   id: 'sat20',
+      //   instance: new Sat20Connector(this.network),
+      //   installed: !!window.sat20,
+      // },
       {
         id: 'unisat',
         instance: new UnisatConnector(this.network),
