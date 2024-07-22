@@ -36,6 +36,12 @@ class BtcWalletConnect {
     defaultConnectorId = 'sat20',
   }: BtcWalletConnectOptions) {
     this.network = network;
+
+    // Split the hostname by '.'
+    const hostnameParts = window.location.hostname.split('.');
+    // Check if the hostname has three parts and the first part is 'test' or 'dev'
+    const needSat20 = hostnameParts.length === 3 && (hostnameParts[0] === 'test' || hostnameParts[0] === 'dev');
+
     this.connectors = [
       // {
       //   id: 'sat20',
@@ -53,6 +59,15 @@ class BtcWalletConnect {
         installed: !!window.okxwallet,
       },
     ];
+
+    if (needSat20) {
+      this.connectors.unshift({
+        id: 'sat20',
+        instance: new Sat20Connector(this.network),
+        installed: !!window.sat20,
+      });
+    }
+
     this.localConnectorId =
       (localStorage.getItem(this.local_storage_key) as BtcConnectorId) ||
       undefined;
