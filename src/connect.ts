@@ -38,9 +38,9 @@ class BtcWalletConnect {
     this.network = network;
 
     // Split the hostname by '.'
-    const hostnameParts = window.location.hostname.split('.');
+    const hostname = window.location.hostname;
     // Check if the hostname has three parts and the first part is 'test' or 'dev'
-    const needSat20 = hostnameParts.length === 3 && (hostnameParts[0] === 'test' || hostnameParts[0] === 'dev');
+    const needDeleteSat20 = (hostname === 'ordx.market');
 
     this.connectors = [
       // {
@@ -60,7 +60,7 @@ class BtcWalletConnect {
       },
     ];
 
-    if (needSat20) {
+    if (!needDeleteSat20) {
       this.connectors.unshift({
         id: 'sat20',
         instance: new Sat20Connector(this.network),
