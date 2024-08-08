@@ -10,6 +10,7 @@ import { BtcWalletConnectOptions, BtcConnectorId } from '../types/wallet';
 export interface WalletConnectReactProps {
   config?: BtcWalletConnectOptions;
   theme?: 'light' | 'dark';
+  isSwitchNetwork?: boolean;
   ui?: {
     connectClass?: string;
     disconnectClass?: string;
@@ -29,8 +30,9 @@ export interface WalletConnectReactProps {
 }
 
 export const WalletConnectReact = ({
-  config: { network = 'livenet', defaultConnectorId = 'unisat' } = {},
+  config: { network = 'mainnet', defaultConnectorId = 'unisat' } = {},
   theme = 'dark',
+  isSwitchNetwork = false,
   ui: {
     connectClass = '',
     disconnectClass = '',
@@ -46,6 +48,7 @@ export const WalletConnectReact = ({
   onConnectError,
   onDisconnectSuccess,
   onDisconnectError,
+
   children,
 }: WalletConnectReactProps) => {
   const {
@@ -59,6 +62,7 @@ export const WalletConnectReact = ({
     disconnect,
     initStatus,
     btcWallet,
+    switchNetwork,
     switchConnector,
   } = useReactWalletStore((state) => state);
 
@@ -69,22 +73,22 @@ export const WalletConnectReact = ({
   const walletSelect = async (id: BtcConnectorId) => {
     switchConnector(id);
     try {
-      await connect();
-      if (btcWallet) {
-        await onConnectSuccess?.(btcWallet);
-        setModalVisible(false);
+      if (isSwitchNetwork) {
+        await btcWallet?.switchNetwork(network);
       }
+      connect();
+      btcWallet && onConnectSuccess?.(btcWallet);
     } catch (error) {
-      console.error(error);
       onConnectError?.(error);
+    } finally {
+      setModalVisible(false);
     }
   };
   const handlerDisconnect = async () => {
     try {
-      await onDisconnectSuccess?.();
-      await disconnect();
+      onDisconnectSuccess?.();
+      disconnect();
     } catch (error) {
-      console.error(error);
       onDisconnectError?.(error);
     }
   };
@@ -113,11 +117,10 @@ export const WalletConnectReact = ({
         <>
           <button
             onClick={handleConnect}
-            className={`bg-clip-text text-transparent border  rounded-xl h-10 px-4 leading-none hover:border-yellow-500 ${
-              theme === 'dark'
-                ? 'bg-gradient-to-r from-pink-500 to-violet-500 border-gray-600'
-                : 'bg-gradient-to-r from-blue-500 to-green-500 border-gray-300'
-            } ${connectClass}`}
+            className={`bg-clip-text text-transparent border  rounded-xl h-10 px-4 leading-none hover:border-yellow-500 ${theme === 'dark'
+              ? 'bg-gradient-to-r from-pink-500 to-violet-500 border-gray-600'
+              : 'bg-gradient-to-r from-blue-500 to-green-500 border-gray-300'
+              } ${connectClass}`}
           >
             {connectText}
           </button>
@@ -137,11 +140,10 @@ export const WalletConnectReact = ({
       ) : (
         <button
           onClick={handlerDisconnect}
-          className={`bg-clip-text text-transparent border border-gray-300 rounded-xl leading-none h-10 px-4 hover:border-yellow-500 flex justify-center items-center ${
-            theme === 'dark'
-              ? 'bg-gradient-to-r from-pink-500 to-violet-500'
-              : 'bg-gradient-to-r from-blue-500 to-green-500'
-          } ${disconnectClass}`}
+          className={`bg-clip-text text-transparent border border-gray-300 rounded-xl leading-none h-10 px-4 hover:border-yellow-500 flex justify-center items-center ${theme === 'dark'
+            ? 'bg-gradient-to-r from-pink-500 to-violet-500'
+            : 'bg-gradient-to-r from-blue-500 to-green-500'
+            } ${disconnectClass}`}
         >
           <span className='mr-1'>{hideStr(address, 4, '***')}</span>
           <ExitIcon

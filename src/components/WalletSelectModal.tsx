@@ -47,23 +47,20 @@ export const WalletSelectModal = ({
   const modalContent = visible ? (
     <div className='fixed top-0 left-0 w-screen h-screen' style={{ zIndex }}>
       <div
-        className={`bg-black ${
-          theme === 'dark' ? 'bg-opacity-70' : 'bg-opacity-30'
-        }  w-full h-full`}
+        className={`bg-black ${theme === 'dark' ? 'bg-opacity-70' : 'bg-opacity-30'
+          }  w-full h-full`}
       ></div>
       <div
-        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 max-w-[90%] min-h-30 max-h-[full] rounded-xl  overflow-hidden ${
-          theme === 'dark'
-            ? 'text-[#ecedee] bg-[#18181b]'
-            : 'bg-white text-black'
-        } ${className}`}
+        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 max-w-[90%] min-h-30 max-h-[full] rounded-xl  overflow-hidden ${theme === 'dark'
+          ? 'text-[#ecedee] bg-[#18181b]'
+          : 'bg-white text-black'
+          } ${className}`}
       >
         <div
-          className={`p-4  relative ${
-            theme === 'dark'
-              ? 'border-b border-gray-600'
-              : 'border-b border-gray-200'
-          }`}
+          className={`p-4  relative ${theme === 'dark'
+            ? 'border-b border-gray-600'
+            : 'border-b border-gray-200'
+            }`}
         >
           <h2 className='text-xl font-bold text-center'>{title}</h2>
           <button
@@ -82,11 +79,10 @@ export const WalletSelectModal = ({
             <div
               key={wallet.id}
               onClick={() => clickHandler?.(wallet.id, wallet.installed)}
-              className={`h-12 cursor-pointer flex items-center justify-between p-2 gap-2 rounded-lg relative overflow-hidden ${
-                theme === 'dark'
-                  ? 'bg-[#2d2d2d] text-[#ecedee]'
-                  : 'bg-gray-100 text-black'
-              }`}
+              className={`h-12 cursor-pointer flex items-center justify-between p-2 gap-2 rounded-lg relative overflow-hidden ${theme === 'dark'
+                ? 'bg-[#2d2d2d] text-[#ecedee]'
+                : 'bg-gray-100 text-black'
+                }`}
             >
               {loading && (
                 <div className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-80 flex items-center justify-center'>

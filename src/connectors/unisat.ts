@@ -2,15 +2,6 @@ import { unisatLogo } from '../assets';
 import { WalletNetwork, Balance } from '../types';
 import { BtcConnector } from './base';
 
-const getUnisatNetwork = (network: WalletNetwork): WalletNetwork => {
-  switch (network) {
-    case 'testnet':
-      return 'testnet';
-    default:
-      return 'livenet';
-  }
-};
-
 export namespace UnisatWalletTypes {
   export type AccountsChangedEvent = (
     event: 'accountsChanged' | 'networkChanged',
@@ -36,7 +27,7 @@ export namespace UnisatWalletTypes {
 
   export type SendInscriptionsResult = { txid: string };
 
-  export type Network = 'livenet' | 'testnet';
+  export type Network = 'mainnet' | 'testnet';
 }
 export type Unisat = {
   requestAccounts: () => Promise<string[]>;
@@ -52,7 +43,7 @@ export type Unisat = {
     inscriptionId: string,
     options?: { feeRate: number },
   ) => Promise<UnisatWalletTypes.SendInscriptionsResult>;
-  switchNetwork: (network: 'livenet' | 'testnet') => Promise<void>;
+  switchNetwork: (network: 'mainnet' | 'testnet') => Promise<void>;
   getNetwork: () => Promise<UnisatWalletTypes.Network>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<Balance>;
@@ -106,7 +97,7 @@ export class UnisatConnector extends BtcConnector {
   readonly id = 'unisat';
   readonly name: string = 'Unisat';
   readonly logo: string = unisatLogo;
-  readonly networks: WalletNetwork[] = ['livenet', 'testnet'];
+  readonly networks: WalletNetwork[] = ['mainnet', 'testnet'];
   public homepage = 'https://unisat.io';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
   public unisat: Unisat;
@@ -188,9 +179,7 @@ export class UnisatConnector extends BtcConnector {
     if (!this.unisat) {
       throw new Error('Unisat not installed');
     }
-    await this.unisat.switchNetwork(
-      getUnisatNetwork(network) as UnisatWalletTypes.Network,
-    );
+    await this.unisat.switchNetwork(network);
   }
 
   async getPublicKey() {

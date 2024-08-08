@@ -2,18 +2,9 @@ import { sat20Logo } from '../assets';
 import { WalletNetwork, Balance } from '../types';
 import { BtcConnector } from './base';
 
-const getSat20Network = (network: WalletNetwork): WalletNetwork => {
-  switch (network) {
-    case 'testnet':
-      return 'testnet';
-    default:
-      return 'livenet';
-  }
-};
-
 export namespace Sat20WalletTypes {
   export type AccountsChangedEvent = (
-    event: 'accountsChanged' | 'networkChanged',
+    event: 'accountsChanged' | 'networkChanged' | 'environmentChanged',
     handler: (accounts: Array<string> | string) => void,
   ) => void;
 
@@ -36,7 +27,7 @@ export namespace Sat20WalletTypes {
 
   export type SendInscriptionsResult = { txid: string };
 
-  export type Network = 'livenet' | 'testnet';
+  export type Network = 'mainnet' | 'testnet';
 }
 export type SAT20 = {
   requestAccounts: () => Promise<string[]>;
@@ -52,7 +43,7 @@ export type SAT20 = {
     inscriptionId: string,
     options?: { feeRate: number },
   ) => Promise<Sat20WalletTypes.SendInscriptionsResult>;
-  switchNetwork: (network: 'livenet' | 'testnet') => Promise<void>;
+  switchNetwork: (network: 'mainnet' | 'testnet') => Promise<void>;
   getNetwork: () => Promise<Sat20WalletTypes.Network>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<Balance>;
@@ -107,7 +98,7 @@ export class Sat20Connector extends BtcConnector {
   readonly id = 'sat20';
   readonly name: string = 'SAT20';
   readonly logo: string = sat20Logo;
-  readonly networks: WalletNetwork[] = ['livenet', 'testnet'];
+  readonly networks: WalletNetwork[] = ['mainnet', 'testnet'];
   public homepage = 'https://sat20.org';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
   public sat20: SAT20;
@@ -116,13 +107,13 @@ export class Sat20Connector extends BtcConnector {
     super(network);
     this.sat20 = window.sat20;
   }
-  on(event: 'accountsChanged' | 'networkChanged', handler: any) {
+  on(event: 'accountsChanged' | 'networkChanged' | 'environmentChanged', handler: any) {
     if (!this.sat20) {
       throw new Error('SAT20 not installed');
     }
     this.sat20.on(event, handler);
   }
-  removeListener(event: 'accountsChanged' | 'networkChanged', handler: any) {
+  removeListener(event: 'accountsChanged' | 'networkChanged' | 'environmentChanged', handler: any) {
     if (!this.sat20) {
       throw new Error('SAT20 not installed');
     }
@@ -189,9 +180,7 @@ export class Sat20Connector extends BtcConnector {
     if (!this.sat20) {
       throw new Error('SAT20 not installed');
     }
-    await this.sat20.switchNetwork(
-      getSat20Network(network) as Sat20WalletTypes.Network,
-    );
+    await this.sat20.switchNetwork(network);
   }
 
   async getPublicKey() {

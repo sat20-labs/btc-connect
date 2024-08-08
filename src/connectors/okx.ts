@@ -29,7 +29,7 @@ export namespace OkxWalletTypes {
 
   export type GetInscriptionsResult = { total: number; list: Inscription[] };
 
-  export type Network = 'livenet' | 'testnet';
+  export type Network = 'mainnet' | 'testnet';
 
   export interface ConnectResult {
     address: string;
@@ -94,6 +94,7 @@ export type OkxWallet = {
   connect: () => Promise<OkxWalletTypes.ConnectResult>;
   requestAccounts: () => Promise<string[]>;
   getAccounts: () => Promise<string[]>;
+  switchNetwork: (network: 'mainnet' | 'testnet') => Promise<void>;
   getNetwork: () => Promise<OkxWalletTypes.Network>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<Balance>;
@@ -221,7 +222,7 @@ export class OkxConnector extends BtcConnector {
   readonly id = 'okx';
   readonly name: string = 'OKX';
   readonly logo: string = okxLogo;
-  readonly networks: WalletNetwork[] = ['livenet'];
+  readonly networks: WalletNetwork[] = ['mainnet'];
   public homepage: string =
     'https://www.okx.com/web3/build/docs/sdks/chains/bitcoin/provider';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
@@ -229,11 +230,11 @@ export class OkxConnector extends BtcConnector {
 
   constructor(network: WalletNetwork) {
     super(network);
-    this.network = 'livenet';
+    this.network = 'mainnet';
     this.okxwallet = window.okxwallet?.bitcoin;
   }
   on(event: 'accountsChanged' | 'accountChanged', handler: any) {
-    if (this.network === 'livenet') {
+    if (this.network === 'mainnet') {
       this.okxwallet?.on(event, handler);
     }
   }
@@ -247,7 +248,7 @@ export class OkxConnector extends BtcConnector {
       this.connected = true;
       this.address = res.address;
       this.publicKey = res.publicKey;
-      await this.switchNetwork('livenet');
+      await this.switchNetwork('mainnet');
       await this.getCurrentInfo();
     } catch (error) {
       throw error;
@@ -255,23 +256,21 @@ export class OkxConnector extends BtcConnector {
     return this.connected;
   }
   async getCurrentInfo() {
-    if (this.network === 'livenet') {
-      if (!this.okxwallet) {
-        throw new Error('OkxWallet not installed');
-      }
-      const accounts = await this.okxwallet.getAccounts();
-      if (accounts.length) {
-        this.address = accounts[0];
-        const [publicKey, network, banance] = await Promise.all([
-          this.okxwallet.getPublicKey(),
-          this.okxwallet.getNetwork(),
-          this.okxwallet.getBalance(),
-        ]);
-        this.publicKey = publicKey;
-        this.network = network;
-        this.banance = banance;
-        this.connected = true;
-      }
+    if (!this.okxwallet) {
+      throw new Error('OkxWallet not installed');
+    }
+    const accounts = await this.okxwallet.getAccounts();
+    if (accounts.length) {
+      this.address = accounts[0];
+      const [publicKey, network, banance] = await Promise.all([
+        this.okxwallet.getPublicKey(),
+        this.okxwallet.getNetwork(),
+        this.okxwallet.getBalance(),
+      ]);
+      this.publicKey = publicKey;
+      this.network = network;
+      this.banance = banance;
+      this.connected = true;
     }
   }
   async disconnect(): Promise<void> {
@@ -281,9 +280,6 @@ export class OkxConnector extends BtcConnector {
     this.banance = { confirmed: 0, unconfirmed: 0, total: 0 };
   }
   async getAccounts(): Promise<string[]> {
-    if (this.network !== 'livenet') {
-      throw new Error("Can't get accounts on testnet");
-    }
     if (!this.okxwallet) {
       throw new Error('OkxWallet not installed');
     }
@@ -293,18 +289,12 @@ export class OkxConnector extends BtcConnector {
     return this.network;
   }
   async getPublicKey() {
-    if (this.network !== 'livenet') {
-      throw new Error("Can't get accounts on testnet");
-    }
     if (!this.okxwallet) {
       throw new Error('OkxWallet not installed');
     }
     return this.okxwallet.getPublicKey();
   }
   async getBalance() {
-    if (this.network !== 'livenet') {
-      throw new Error("Can't get accounts on testnet");
-    }
     if (!this.okxwallet) {
       throw new Error('OkxWallet not installed');
     }
@@ -312,9 +302,6 @@ export class OkxConnector extends BtcConnector {
   }
 
   async sendToAddress(toAddress: string, amount: number) {
-    if (this.network !== 'livenet') {
-      throw new Error("Can't get accounts on testnet");
-    }
     if (!this.okxwallet) {
       throw new Error('OkxWallet not installed');
     }
@@ -322,11 +309,16 @@ export class OkxConnector extends BtcConnector {
   }
 
   async switchNetwork(network: WalletNetwork) {
-    this.network = 'livenet';
-    // this.okxwallet =
-    //   network === 'testnet'
-    //     ? window.okxwallet.bitcoinTestnet
-    //     : window.okxwallet.bitcoin;
+    if (!this.okxwallet) {
+      throw new Error('Unisat not installed');
+    }
+    switch (network) {
+      case 'mainnet':
+        break;
+      case 'testnet':
+        throw new Error("no implementation for okx testnet");
+    }
+    this.network = network;
   }
 
   async signPsbt(psbtHex: string, options?: any) {
@@ -348,7 +340,7 @@ export class OkxConnector extends BtcConnector {
     return this.okxwallet.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
-    if (this.network !== 'livenet') {
+    if (this.network !== 'mainnet') {
       throw new Error("Can't get accounts on testnet");
     }
     if (!this.okxwallet) {
@@ -357,7 +349,7 @@ export class OkxConnector extends BtcConnector {
     return this.okxwallet.pushTx(rawTx);
   }
   async pushPsbt(psbtHex: string) {
-    if (this.network !== 'livenet') {
+    if (this.network !== 'mainnet') {
       throw new Error("Can't get accounts on testnet");
     }
     if (!this.okxwallet) {

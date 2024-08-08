@@ -7,17 +7,10 @@
   <title>Document</title>
   <script type="module">
     import BtcWalletConnect from './dist/index.js';
-    console.log(BtcWalletConnect)
     const btcWallet = new BtcWalletConnect({
-      network: "testnet",
-      defaultConnectorId: 'okx'
+      network: "mainnet",
+      defaultConnectorId: 'unisat'
     });
-    // await btcWallet.check()
-    console.log(btcWallet)
-    console.log(btcWallet.connector)
-    // await btcWallet.connect()
-    console.log(btcWallet.address)
-    console.log(btcWallet.balance)
   </script>
 </head>
 

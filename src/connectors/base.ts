@@ -20,7 +20,7 @@ export abstract class BtcConnector {
   publicKey: string | undefined;
 
   network: WalletNetwork;
-  networks: WalletNetwork[] = ['livenet', 'testnet'];
+  networks: WalletNetwork[] = ['mainnet', 'testnet'];
 
   constructor(network: WalletNetwork) {
     this.network = network;

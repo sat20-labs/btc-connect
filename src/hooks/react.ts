@@ -55,7 +55,7 @@ const defaultInitState: WalletState = {
   publicKey: '',
   address: '',
   connected: false,
-  network: 'livenet',
+  network: 'mainnet',
 };
 
 export const useReactWalletStore = create<WalletStore>()(
@@ -66,7 +66,7 @@ export const useReactWalletStore = create<WalletStore>()(
     },
     init: (config: BtcWalletConnectOptions = {}) => {
       try {
-        const { network = 'livenet', defaultConnectorId = 'sat20' } = config;
+        const { network = 'mainnet', defaultConnectorId = 'sat20' } = config;
         const btcWallet = new BtcWalletConnect(config);
         window.btcWallet = btcWallet;
         set(() => ({
@@ -124,7 +124,6 @@ export const useReactWalletStore = create<WalletStore>()(
           localConnectorId,
         }));
       } catch (error) {
-        console.error('Error checking Wallet', error);
         throw error;
       }
     },
@@ -167,7 +166,7 @@ export const useReactWalletStore = create<WalletStore>()(
         address: '',
         initStatus: false,
         connected: false,
-        network: 'livenet',
+        network: 'mainnet',
       }));
     },
 
@@ -177,7 +176,7 @@ export const useReactWalletStore = create<WalletStore>()(
         if (!btcWallet) {
           throw new Error('Wallet not initialized');
         }
-        const network = get().network === 'testnet' ? 'livenet' : 'testnet';
+        const network = get().network === 'testnet' ? 'mainnet' : 'testnet';
         await btcWallet.switchNetwork(network as any);
         const newNetwork = await btcWallet.getNetwork();
         const address = btcWallet.address;
@@ -194,7 +193,6 @@ export const useReactWalletStore = create<WalletStore>()(
           network: newNetwork,
         }));
       } catch (error) {
-        console.error('Error checking Wallet', error);
         throw error;
       }
     },

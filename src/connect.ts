@@ -32,7 +32,7 @@ class BtcWalletConnect {
   connectors: BtcConnectors[];
   connector?: Connector;
   constructor({
-    network = 'livenet',
+    network = 'mainnet',
     defaultConnectorId = 'sat20',
   }: BtcWalletConnectOptions) {
     this.network = network;
@@ -212,22 +212,23 @@ class BtcWalletConnect {
     return this.connector.pushPsbt(psbtHex);
   }
   on(
-    event: 'networkChanged' | 'accountsChanged' | 'accountChanged',
+    event: 'networkChanged' | 'accountsChanged' | 'accountChanged' | 'environmentChanged',
     handler: any,
   ) {
     if (!this.connector) {
       throw new Error('Connector not found');
     }
     if (this.connector instanceof Sat20Connector) {
-      this.connector.on(event as 'networkChanged' | 'accountsChanged', handler);
+      this.connector.on(event as 'networkChanged' | 'accountsChanged' | 'environmentChanged', handler);
     } else if (this.connector instanceof UnisatConnector) {
       this.connector.on(event as 'networkChanged' | 'accountsChanged', handler);
     } else if (this.connector instanceof OkxConnector) {
-      this.connector.on(event as 'accountsChanged' | 'accountChanged' | 'accountsChanged', handler,);
+      this.connector.on(event as 'accountsChanged' | 'accountChanged', handler);
     }
   }
+
   removeListener(
-    event: 'networkChanged' | 'accountsChanged' | 'accountChanged',
+    event: 'networkChanged' | 'accountsChanged' | 'accountChanged' | 'environmentChanged',
     handler: any,
   ) {
     if (!this.connector) {
@@ -235,7 +236,7 @@ class BtcWalletConnect {
     }
 
     if (this.connector instanceof Sat20Connector) {
-      this.connector.removeListener(event as 'networkChanged' | 'accountsChanged', handler,);
+      this.connector.removeListener(event as 'networkChanged' | 'accountsChanged' | 'environmentChanged', handler,);
     } else if (this.connector instanceof UnisatConnector) {
       this.connector.removeListener(event as 'networkChanged' | 'accountsChanged', handler,);
     } else if (this.connector instanceof OkxConnector) {
