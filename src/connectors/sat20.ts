@@ -117,6 +117,7 @@ export class Sat20Connector extends BtcConnector {
     if (!this.sat20) {
       throw new Error('SAT20 not installed');
     }
+
     this.sat20.removeListener(event, handler);
   }
   async connect(): Promise<boolean> {
