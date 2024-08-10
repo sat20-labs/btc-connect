@@ -166,6 +166,9 @@ class BtcWalletConnect {
     if (!this.connector) {
       throw new Error('Connector not found');
     }
+    if (network === undefined) {
+      throw new Error('Invalid network');
+    }
     await this.connector.switchNetwork(network);
     this.network = network;
     await this.getCurrentInfo();

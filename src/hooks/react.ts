@@ -55,7 +55,7 @@ const defaultInitState: WalletState = {
   publicKey: '',
   address: '',
   connected: false,
-  network: 'mainnet',
+  network: undefined,
 };
 
 export const useReactWalletStore = create<WalletStore>()(

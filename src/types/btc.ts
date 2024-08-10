@@ -4,6 +4,6 @@ export enum BitcoinScriptType {
   P2WPKH = 'P2WPKH',
 }
 
-export type WalletNetwork = 'mainnet' | 'testnet';
+export type WalletNetwork = 'mainnet' | 'testnet' | undefined;
 
 export type Balance = { confirmed: number; unconfirmed: number; total: number };

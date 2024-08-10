@@ -1,5 +1,5 @@
 import { unisatLogo } from '../assets';
-import { WalletNetwork, Balance } from '../types';
+import { WalletNetwork, Balance, BtcWalletNetwork } from '../types';
 import { BtcConnector } from './base';
 
 export namespace UnisatWalletTypes {
@@ -43,7 +43,7 @@ export type Unisat = {
     inscriptionId: string,
     options?: { feeRate: number },
   ) => Promise<UnisatWalletTypes.SendInscriptionsResult>;
-  switchNetwork: (network: 'mainnet' | 'testnet') => Promise<void>;
+  switchNetwork: (network: BtcWalletNetwork) => Promise<void>;
   getNetwork: () => Promise<UnisatWalletTypes.Network>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<Balance>;
@@ -178,6 +178,9 @@ export class UnisatConnector extends BtcConnector {
   async switchNetwork(network: WalletNetwork) {
     if (!this.unisat) {
       throw new Error('Unisat not installed');
+    }
+    if (network === undefined) {
+      throw new Error('Invalid network');
     }
     await this.unisat.switchNetwork(network);
   }

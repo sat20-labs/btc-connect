@@ -1,5 +1,5 @@
 import { sat20Logo } from '../assets';
-import { WalletNetwork, Balance } from '../types';
+import { WalletNetwork, Balance, BtcWalletNetwork } from '../types';
 import { BtcConnector } from './base';
 
 export namespace Sat20WalletTypes {
@@ -43,7 +43,7 @@ export type SAT20 = {
     inscriptionId: string,
     options?: { feeRate: number },
   ) => Promise<Sat20WalletTypes.SendInscriptionsResult>;
-  switchNetwork: (network: 'mainnet' | 'testnet') => Promise<void>;
+  switchNetwork: (network: BtcWalletNetwork) => Promise<void>;
   getNetwork: () => Promise<Sat20WalletTypes.Network>;
   getPublicKey: () => Promise<string>;
   getBalance: () => Promise<Balance>;
@@ -180,6 +180,9 @@ export class Sat20Connector extends BtcConnector {
   async switchNetwork(network: WalletNetwork) {
     if (!this.sat20) {
       throw new Error('SAT20 not installed');
+    }
+    if (network === undefined) {
+      throw new Error('Invalid network');
     }
     await this.sat20.switchNetwork(network);
   }
