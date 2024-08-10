@@ -179,9 +179,6 @@ export class UnisatConnector extends BtcConnector {
     if (!this.unisat) {
       throw new Error('Unisat not installed');
     }
-    if (network === undefined) {
-      throw new Error('Invalid network');
-    }
     await this.unisat.switchNetwork(network);
   }
 

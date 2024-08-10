@@ -181,9 +181,6 @@ export class Sat20Connector extends BtcConnector {
     if (!this.sat20) {
       throw new Error('SAT20 not installed');
     }
-    if (network === undefined) {
-      throw new Error('Invalid network');
-    }
     await this.sat20.switchNetwork(network);
   }
 

@@ -66,11 +66,8 @@ class BtcWalletConnect {
       });
     }
 
-    this.localConnectorId =
-      (localStorage.getItem(this.local_storage_key) as BtcConnectorId) ||
-      undefined;
-    this.disConnectStatus =
-      localStorage.getItem(this.local_disconnect_key) == '1';
+    this.localConnectorId = (localStorage.getItem(this.local_storage_key) as BtcConnectorId) || undefined;
+    this.disConnectStatus = localStorage.getItem(this.local_disconnect_key) == '1';
     this.connectorId = defaultConnectorId;
     this.connector = this.connectors.find(
       (c) => c.id === defaultConnectorId && c.installed,
@@ -165,9 +162,6 @@ class BtcWalletConnect {
   async switchNetwork(network: BtcWalletNetwork) {
     if (!this.connector) {
       throw new Error('Connector not found');
-    }
-    if (network === undefined) {
-      throw new Error('Invalid network');
     }
     await this.connector.switchNetwork(network);
     this.network = network;
