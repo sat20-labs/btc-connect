@@ -213,7 +213,9 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
+      // console.error('on: Connector not found');
       throw new Error('on: Connector not found');
+      return;
     }
     if (this.connector instanceof Sat20Connector) {
       this.connector.on(event as 'networkChanged' | 'accountsChanged' | 'environmentChanged', handler);
@@ -229,7 +231,10 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
-      throw new Error('removeListener: Connector not found');
+      console.warn('removeListener: Connector not found');
+      // throw new Error('removeListener: Connector not found');
+      return;
+
     }
 
     if (this.connector instanceof Sat20Connector) {
@@ -243,7 +248,9 @@ class BtcWalletConnect {
 
   addAccounts(count: number) {
     if (!this.connector) {
-      throw new Error('addAccounts: Connector not found');
+      console.error('addAccounts: Connector not found');
+      // throw new Error('addAccounts: Connector not found');
+      return false;
     }
 
     if (this.connector instanceof Sat20Connector) {
