@@ -78,7 +78,7 @@ class BtcWalletConnect {
       (c) => c.id === id && c.installed,
     )?.instance;
     if (!_c) {
-      throw new Error('Connector not found');
+      throw new Error('switchConnector: Connector not found');
     }
     this.connectorId = id;
     this.connector = _c;
@@ -86,7 +86,7 @@ class BtcWalletConnect {
   }
   async connect() {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('connect: Connector not found');
     }
     this.connected = await this.connector.connect();
     if (this.connected) {
@@ -101,7 +101,7 @@ class BtcWalletConnect {
   }
   private async getCurrentInfo() {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('getCurrentInfo: Connector not found');
     }
     try {
       if (this.connector.getCurrentInfo) {
@@ -125,7 +125,7 @@ class BtcWalletConnect {
       (c) => c.id === this.connectorId && c.installed,
     )?.instance;
     if (!_c) {
-      throw new Error('Connector not found');
+      throw new Error('check: Connector not found');
     }
     this.connector = _c;
     try {
@@ -136,7 +136,7 @@ class BtcWalletConnect {
   }
   async disconnect() {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('disconnect: Connector not found');
     }
     await this.connector.disconnect();
     this.connected = false;
@@ -147,21 +147,21 @@ class BtcWalletConnect {
   }
   async getAccounts() {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('getAccounts: Connector not found');
     }
     return this.connector.getAccounts();
   }
 
   async getNetwork() {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('getNetwork: Connector not found');
     }
     return this.connector.network;
   }
 
   async switchNetwork(network: BtcWalletNetwork) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('switchNetwork: Connector not found');
     }
     await this.connector.switchNetwork(network);
     this.network = network;
@@ -169,7 +169,7 @@ class BtcWalletConnect {
   }
   async sendToAddress(toAddress: string, amount: number) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('sendToAddress: Connector not found');
     }
     if (amount <= 0) {
       throw new Error('Invalid amount');
@@ -179,32 +179,32 @@ class BtcWalletConnect {
 
   async signMessage(message: string, type?: MessageType) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('signMessage: Connector not found');
     }
     return this.connector.signMessage(message);
   }
   async signPsbt(psbtHex: string, options?: any) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('signPsbt: Connector not found');
     }
     return this.connector.signPsbt(psbtHex, options);
   }
 
   async signPsbts(psbtHexs: string[], options?: any) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('signPsbts: Connector not found');
     }
     return this.connector.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('pushTx: Connector not found');
     }
     return this.connector.pushTx(rawTx);
   }
   async pushPsbt(psbtHex: string) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('pushPsbt: Connector not found');
     }
     return this.connector.pushPsbt(psbtHex);
   }
@@ -213,7 +213,7 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('on: Connector not found');
     }
     if (this.connector instanceof Sat20Connector) {
       this.connector.on(event as 'networkChanged' | 'accountsChanged' | 'environmentChanged', handler);
@@ -229,7 +229,7 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('removeListener: Connector not found');
     }
 
     if (this.connector instanceof Sat20Connector) {
@@ -243,7 +243,7 @@ class BtcWalletConnect {
 
   addAccounts(count: number) {
     if (!this.connector) {
-      throw new Error('Connector not found');
+      throw new Error('addAccounts: Connector not found');
     }
 
     if (this.connector instanceof Sat20Connector) {
