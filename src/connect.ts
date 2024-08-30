@@ -147,9 +147,14 @@ class BtcWalletConnect {
   }
   async getAccounts() {
     if (!this.connector) {
+
       throw new Error('getAccounts: Connector not found');
     }
     return this.connector.getAccounts();
+  }
+
+  reset() {
+    localStorage.setItem(this.local_disconnect_key, '1');
   }
 
   async getNetwork() {
@@ -213,8 +218,8 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
-      // console.error('on: Connector not found');
-      throw new Error('on: Connector not found');
+      console.error('on: Connector not found');
+      // throw new Error('on: Connector not found');
       return;
     }
     if (this.connector instanceof Sat20Connector) {
