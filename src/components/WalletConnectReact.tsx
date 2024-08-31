@@ -30,7 +30,7 @@ export interface WalletConnectReactProps {
 }
 
 export const WalletConnectReact = ({
-  config: { network = 'mainnet', defaultConnectorId = 'unisat' } = {},
+  config: { network = 'mainnet' } = {},
   theme = 'dark',
   isSwitchNetwork = false,
   ui: {
@@ -98,18 +98,20 @@ export const WalletConnectReact = ({
         id: c.id,
         name: c.name,
         logo: c.logo,
-        installed: c.installed,
+        get installed() {
+          return c.installed;
+        },
       })) || []
     );
   }, [connectors]);
 
   useEffect(() => {
-    init({ network, defaultConnectorId });
+    init({ network });
   }, []);
 
   useEffect(() => {
-    init({ network, defaultConnectorId });
-  }, [network, defaultConnectorId]);
+    init({ network });
+  }, [network]);
 
   return (
     <>

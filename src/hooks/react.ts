@@ -31,7 +31,7 @@ export type WalletState = {
     name: string;
     logo: string;
     connector: any;
-    installed: boolean;
+    readonly installed: boolean;
   }[];
 };
 
@@ -66,13 +66,12 @@ export const useReactWalletStore = create<WalletStore>()(
     },
     init: (config: BtcWalletConnectOptions = {}) => {
       try {
-        const { network = 'mainnet', defaultConnectorId = 'sat20' } = config;
+        const { network = 'mainnet' } = config;
         const btcWallet = new BtcWalletConnect(config);
         window.btcWallet = btcWallet;
         set(() => ({
           btcWallet,
           network,
-          connectorId: defaultConnectorId,
           connector: btcWallet.connector,
           localConnectorId: btcWallet.localConnectorId,
           connectors: btcWallet.connectors.map((con) => ({
@@ -80,7 +79,9 @@ export const useReactWalletStore = create<WalletStore>()(
             name: con.instance.name,
             logo: con.instance.logo,
             connector: con.instance,
-            installed: con.installed,
+            get installed() {
+              return con.instance.installed;
+            } 
           })),
           initStatus: true,
         }));

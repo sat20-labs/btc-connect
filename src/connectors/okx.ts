@@ -226,25 +226,32 @@ export class OkxConnector extends BtcConnector {
   public homepage: string =
     'https://www.okx.com/web3/build/docs/sdks/chains/bitcoin/provider';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
-  public okxwallet: OkxWallet;
 
   constructor(network: WalletNetwork) {
     super(network);
     this.network = 'mainnet';
-    this.okxwallet = window.okxwallet?.bitcoin;
   }
+
+  get wallet(): OkxWallet {
+    return window.okxwallet?.bitcoin;
+  }
+
+  get installed(): boolean {
+    return !!window.okxwallet;
+  }
+
   on(event: 'accountsChanged' | 'accountChanged', handler: any) {
     if (this.network === 'mainnet') {
-      this.okxwallet?.on(event, handler);
+      this.wallet?.on(event, handler);
     }
   }
   async connect(): Promise<boolean> {
     this.connected = false;
     try {
-      if (!this.okxwallet) {
+      if (!this.wallet) {
         throw new Error('OkxWallet not installed');
       }
-      const res = await this.okxwallet.connect();
+      const res = await this.wallet.connect();
       this.connected = true;
       this.address = res.address;
       this.publicKey = res.publicKey;
@@ -256,16 +263,16 @@ export class OkxConnector extends BtcConnector {
     return this.connected;
   }
   async getCurrentInfo() {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    const accounts = await this.okxwallet.getAccounts();
+    const accounts = await this.wallet.getAccounts();
     if (accounts.length) {
       this.address = accounts[0];
       const [publicKey, network, banance] = await Promise.all([
-        this.okxwallet.getPublicKey(),
-        this.okxwallet.getNetwork(),
-        this.okxwallet.getBalance(),
+        this.wallet.getPublicKey(),
+        this.wallet.getNetwork(),
+        this.wallet.getBalance(),
       ]);
       this.publicKey = publicKey;
       this.network = network;
@@ -280,36 +287,36 @@ export class OkxConnector extends BtcConnector {
     this.banance = { confirmed: 0, unconfirmed: 0, total: 0 };
   }
   async getAccounts(): Promise<string[]> {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.getAccounts();
+    return this.wallet.getAccounts();
   }
   async getNetwork(): Promise<WalletNetwork> {
     return this.network;
   }
   async getPublicKey() {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.getPublicKey();
+    return this.wallet.getPublicKey();
   }
   async getBalance() {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.getBalance();
+    return this.wallet.getBalance();
   }
 
   async sendToAddress(toAddress: string, amount: number) {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet?.sendBitcoin(toAddress, amount);
+    return this.wallet?.sendBitcoin(toAddress, amount);
   }
 
   async switchNetwork(network: WalletNetwork) {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('Unisat not installed');
     }
     switch (network) {
@@ -322,39 +329,39 @@ export class OkxConnector extends BtcConnector {
   }
 
   async signPsbt(psbtHex: string, options?: any) {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.signPsbt(psbtHex, options);
+    return this.wallet.signPsbt(psbtHex, options);
   }
   async signMessage(message: string) {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.signMessage(message);
+    return this.wallet.signMessage(message);
   }
   async signPsbts(psbtHexs: string[], options?: any) {
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.signPsbts(psbtHexs, options);
+    return this.wallet.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
     if (this.network !== 'mainnet') {
       throw new Error("Can't get accounts on testnet");
     }
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.pushTx(rawTx);
+    return this.wallet.pushTx(rawTx);
   }
   async pushPsbt(psbtHex: string) {
     if (this.network !== 'mainnet') {
       throw new Error("Can't get accounts on testnet");
     }
-    if (!this.okxwallet) {
+    if (!this.wallet) {
       throw new Error('OkxWallet not installed');
     }
-    return this.okxwallet.pushPsbt(psbtHex);
+    return this.wallet.pushPsbt(psbtHex);
   }
 }

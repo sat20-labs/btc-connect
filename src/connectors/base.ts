@@ -26,6 +26,10 @@ export abstract class BtcConnector {
     this.network = network;
   }
 
+  get installed(): boolean {
+    return false;
+  }
+  
   abstract connect(): Promise<boolean>;
 
   abstract sendToAddress(toAddress: string, amount: number): Promise<string>;

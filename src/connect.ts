@@ -15,13 +15,12 @@ export type Connector = Sat20Connector | UnisatConnector | OkxConnector;
 export interface BtcConnectors {
   id: BtcConnectorId;
   instance: Connector;
-  installed: boolean;
 }
 
 class BtcWalletConnect {
-  private local_storage_key = '_btc_connector_id';
-  private local_disconnect_key = '_btc_disconnect_status';
-  connectorId: BtcConnectorId = 'sat20';
+  private local_storage_key = '_btc_connector_id_1';
+  private local_disconnect_key = '_btc_disconnect_status_1';
+  connectorId?: BtcConnectorId;
   localConnectorId?: BtcConnectorId;
   disConnectStatus: boolean = false;
   connected: boolean = false;
@@ -30,10 +29,17 @@ class BtcWalletConnect {
   network: BtcWalletNetwork;
   balance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
   connectors: BtcConnectors[];
-  connector?: Connector;
+  _connector?: Connector;
+
+  get connector(): Connector | undefined {
+    if (!this.connectorId) {
+      return;
+    }
+    return this.connectors.find((c) => c.id === this.connectorId && c.instance.installed)?.instance;
+  }
+
   constructor({
     network = 'mainnet',
-    defaultConnectorId = 'sat20',
   }: BtcWalletConnectOptions) {
     this.network = network;
 
@@ -49,12 +55,10 @@ class BtcWalletConnect {
       {
         id: 'unisat',
         instance: new UnisatConnector(this.network),
-        installed: !!window.unisat,
       },
       {
         id: 'okx',
         instance: new OkxConnector(this.network),
-        installed: !!window.okxwallet,
       },
     ];
 
@@ -62,32 +66,34 @@ class BtcWalletConnect {
       this.connectors.unshift({
         id: 'sat20',
         instance: new Sat20Connector(this.network),
-        installed: !!window.sat20,
       });
     }
 
     this.localConnectorId = (localStorage.getItem(this.local_storage_key) as BtcConnectorId) || undefined;
     this.disConnectStatus = localStorage.getItem(this.local_disconnect_key) == '1';
-    this.connectorId = defaultConnectorId;
-    this.connector = this.connectors.find(
-      (c) => c.id === defaultConnectorId && c.installed,
-    )?.instance;
   }
+
   switchConnector(id: BtcConnectorId) {
     const _c = this.connectors.find(
-      (c) => c.id === id && c.installed,
+      (c) => c.id === id && c.instance.installed,
     )?.instance;
     if (!_c) {
-      throw new Error('switchConnector: Connector not found');
+      this.reset();
+      console.error('switchConnector: Connector not found: ' + id);
+      return;
+      // throw new Error('switchConnector: Connector not found');
     }
     this.connectorId = id;
-    this.connector = _c;
     return _c;
   }
   async connect() {
     if (!this.connector) {
-      throw new Error('connect: Connector not found');
+      this.reset();
+      console.error('connect: Connector not found');
+      return;
+      // throw new Error('connect: Connector not found');
     }
+
     this.connected = await this.connector.connect();
     if (this.connected) {
       this.address = this.connector.address;
@@ -95,13 +101,16 @@ class BtcWalletConnect {
       this.balance = this.connector.banance;
       this.network = this.connector.network;
     }
-    localStorage.setItem(this.local_storage_key, this.connectorId);
+    localStorage.setItem(this.local_storage_key, this.connectorId || '');
     localStorage.removeItem(this.local_disconnect_key);
     return this.connected;
   }
   private async getCurrentInfo() {
     if (!this.connector) {
-      throw new Error('getCurrentInfo: Connector not found');
+      this.reset();
+      console.error('getCurrentInfo: Connector not found');
+      return;
+      // throw new Error('getCurrentInfo: Connector not found');
     }
     try {
       if (this.connector.getCurrentInfo) {
@@ -122,12 +131,14 @@ class BtcWalletConnect {
     }
     this.connectorId = this.localConnectorId || this.connectorId;
     const _c = this.connectors.find(
-      (c) => c.id === this.connectorId && c.installed,
+      (c) => c.id === this.connectorId && c.instance.installed,
     )?.instance;
     if (!_c) {
-      throw new Error('check: Connector not found');
+      this.reset();
+      console.error('check: Connector not found');
+      return;
+      // throw new Error('check: Connector not found');
     }
-    this.connector = _c;
     try {
       await this.getCurrentInfo();
     } catch (error) {
@@ -136,37 +147,49 @@ class BtcWalletConnect {
   }
   async disconnect() {
     if (!this.connector) {
-      throw new Error('disconnect: Connector not found');
+      this.reset();
+      console.error('disconnect: Connector not found');
+      return;
+      // throw new Error('disconnect: Connector not found');
     }
     await this.connector.disconnect();
+    this.reset();
+  }
+  async getAccounts() {
+    if (!this.connector) {
+      this.reset();
+      console.error('getAccounts: Connector not found');
+      return;
+      // throw new Error('getAccounts: Connector not found');
+    }
+    return this.connector.getAccounts();
+  }
+
+  reset() {
+    this.connectorId = undefined;
     this.connected = false;
     this.address = undefined;
     this.publicKey = undefined;
     this.balance = { confirmed: 0, unconfirmed: 0, total: 0 };
     localStorage.setItem(this.local_disconnect_key, '1');
   }
-  async getAccounts() {
-    if (!this.connector) {
-
-      throw new Error('getAccounts: Connector not found');
-    }
-    return this.connector.getAccounts();
-  }
-
-  reset() {
-    localStorage.setItem(this.local_disconnect_key, '1');
-  }
 
   async getNetwork() {
     if (!this.connector) {
-      throw new Error('getNetwork: Connector not found');
+      this.reset();
+      console.error('getNetwork: Connector not found');
+      return;
+      // throw new Error('getNetwork: Connector not found');
     }
     return this.connector.network;
   }
 
   async switchNetwork(network: BtcWalletNetwork) {
     if (!this.connector) {
-      throw new Error('switchNetwork: Connector not found');
+      this.reset();
+      console.error('switchNetwork: Connector not found');
+      return;
+      // throw new Error('switchNetwork: Connector not found');
     }
     await this.connector.switchNetwork(network);
     this.network = network;
@@ -174,42 +197,62 @@ class BtcWalletConnect {
   }
   async sendToAddress(toAddress: string, amount: number) {
     if (!this.connector) {
-      throw new Error('sendToAddress: Connector not found');
+      this.reset();
+      console.error('sendToAddress: Connector not found');
+      return;
+      // throw new Error('sendToAddress: Connector not found');
     }
     if (amount <= 0) {
-      throw new Error('Invalid amount');
+      console.error('sendToAddress: Invalid amount');
+      return;
+      // throw new Error('Invalid amount');
     }
     return this.connector.sendToAddress(toAddress, amount);
   }
 
   async signMessage(message: string, type?: MessageType) {
     if (!this.connector) {
-      throw new Error('signMessage: Connector not found');
+      this.reset();
+      console.error('signMessage: Connector not found');
+      return;
+      // throw new Error('signMessage: Connector not found');
     }
     return this.connector.signMessage(message);
   }
   async signPsbt(psbtHex: string, options?: any) {
     if (!this.connector) {
-      throw new Error('signPsbt: Connector not found');
+      this.reset();
+      console.error('signPsbt: Connector not found');
+      return;
+      // throw new Error('signPsbt: Connector not found');
     }
     return this.connector.signPsbt(psbtHex, options);
   }
 
   async signPsbts(psbtHexs: string[], options?: any) {
     if (!this.connector) {
-      throw new Error('signPsbts: Connector not found');
+      this.reset();
+      console.error('signPsbts: Connector not found');
+      return;
+      // throw new Error('signPsbts: Connector not found');
     }
     return this.connector.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
     if (!this.connector) {
-      throw new Error('pushTx: Connector not found');
+      this.reset();
+      console.error('pushTx: Connector not found');
+      return;
+      // throw new Error('pushTx: Connector not found');
     }
     return this.connector.pushTx(rawTx);
   }
   async pushPsbt(psbtHex: string) {
     if (!this.connector) {
-      throw new Error('pushPsbt: Connector not found');
+      this.reset();
+      console.error('pushPsbt: Connector not found');
+      return;
+      // throw new Error('pushPsbt: Connector not found');
     }
     return this.connector.pushPsbt(psbtHex);
   }
@@ -218,7 +261,8 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
-      console.error('on: Connector not found');
+      // console.warn('on: Connector not found');
+      // this.reset();
       // throw new Error('on: Connector not found');
       return;
     }
@@ -236,7 +280,8 @@ class BtcWalletConnect {
     handler: any,
   ) {
     if (!this.connector) {
-      console.warn('removeListener: Connector not found');
+      // this.reset();
+      // console.warn('removeListener: Connector not found');
       // throw new Error('removeListener: Connector not found');
       return;
 
@@ -254,6 +299,7 @@ class BtcWalletConnect {
   addAccounts(count: number) {
     if (!this.connector) {
       console.error('addAccounts: Connector not found');
+      this.reset();
       // throw new Error('addAccounts: Connector not found');
       return false;
     }

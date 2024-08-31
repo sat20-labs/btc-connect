@@ -101,29 +101,36 @@ export class Sat20Connector extends BtcConnector {
   readonly networks: WalletNetwork[] = ['mainnet', 'testnet'];
   public homepage = 'https://sat20.org';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
-  public sat20: SAT20;
+  
 
   constructor(network: WalletNetwork) {
     super(network);
-    this.sat20 = window.sat20;
   }
+  get wallet(): SAT20 {
+    return window.sat20;
+  }
+
+  get installed(): boolean {
+    return !!window.sat20;
+  }
+
   on(event: 'accountsChanged' | 'networkChanged' | 'environmentChanged', handler: any) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    this.sat20.on(event, handler);
+    this.wallet.on(event, handler);
   }
   removeListener(event: 'accountsChanged' | 'networkChanged' | 'environmentChanged', handler: any) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
 
-    this.sat20.removeListener(event, handler);
+    this.wallet.removeListener(event, handler);
   }
   async connect(): Promise<boolean> {
     this.connected = false;
     try {
-      if (!this.sat20) {
+      if (!this.wallet) {
         throw new Error('SAT20 not installed');
       }
       await this.requestAccounts();
@@ -135,22 +142,22 @@ export class Sat20Connector extends BtcConnector {
     }
   }
   async requestAccounts() {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.requestAccounts();
+    return this.wallet.requestAccounts();
   }
   async getCurrentInfo() {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    const accounts = await this.sat20.getAccounts();
+    const accounts = await this.wallet.getAccounts();
     if (accounts.length) {
       this.address = accounts[0];
       const [publicKey, network, banance] = await Promise.all([
-        this.sat20.getPublicKey(),
-        this.sat20.getNetwork(),
-        this.sat20.getBalance(),
+        this.wallet.getPublicKey(),
+        this.wallet.getNetwork(),
+        this.wallet.getBalance(),
       ]);
       this.publicKey = publicKey;
       this.network = network;
@@ -165,73 +172,73 @@ export class Sat20Connector extends BtcConnector {
     this.banance = { confirmed: 0, unconfirmed: 0, total: 0 };
   }
   async getAccounts(): Promise<string[]> {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.getAccounts();
+    return this.wallet.getAccounts();
   }
   async sendToAddress(toAddress: string, amount: number) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20?.sendBitcoin(toAddress, amount);
+    return this.wallet?.sendBitcoin(toAddress, amount);
   }
 
   async switchNetwork(network: WalletNetwork) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    await this.sat20.switchNetwork(network);
+    await this.wallet.switchNetwork(network);
   }
 
   async getPublicKey() {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.getPublicKey();
+    return this.wallet.getPublicKey();
   }
 
   async getBalance() {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.getBalance();
+    return this.wallet.getBalance();
   }
   async signPsbt(psbtHex: string, options?: any) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.signPsbt(psbtHex, options);
+    return this.wallet.signPsbt(psbtHex, options);
   }
   async signMessage(message: string) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.signMessage(message);
+    return this.wallet.signMessage(message);
   }
   async signPsbts(psbtHexs: string[], options?: any) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.signPsbts(psbtHexs, options);
+    return this.wallet.signPsbts(psbtHexs, options);
   }
   async pushTx(rawTx: string) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.pushTx({ rawtx: rawTx });
+    return this.wallet.pushTx({ rawtx: rawTx });
   }
   async pushPsbt(psbtHex: string) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.pushPsbt(psbtHex);
+    return this.wallet.pushPsbt(psbtHex);
   }
 
   async addAccounts(count: number) {
-    if (!this.sat20) {
+    if (!this.wallet) {
       throw new Error('SAT20 not installed');
     }
-    return this.sat20.addAccounts(count);
+    return this.wallet.addAccounts(count);
   }
 }
