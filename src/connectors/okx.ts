@@ -275,7 +275,7 @@ export class OkxConnector extends BtcConnector {
         this.wallet.getBalance(),
       ]);
       this.publicKey = publicKey;
-      this.network = network;
+      // this.network = network;
       this.banance = banance;
       this.connected = true;
     }

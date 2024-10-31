@@ -76,7 +76,7 @@ import "btc-connect/dist/style/index.css";
 
 const App = () => {
   const config = {
-    network: 'livenet', // or 'testnet'
+    network: 'mainnet', // or 'testnet'
     defaultConnectorId: 'sat20', // 'unisat' or 'okx'
   };
 
@@ -149,7 +149,7 @@ You can use the `BtcWalletConnect` class directly in your JavaScript code:
 import BtcWalletConnect from 'btc-connect';
 
 const config = {
-  network: 'livenet', // or 'testnet'
+  network: 'mainnet', // or 'testnet'
   defaultConnectorId: 'sat20', // 'unisat' or 'okx'
 };
 

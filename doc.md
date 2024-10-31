@@ -8,7 +8,7 @@ Let's refine the documentation by including explanations for TypeScript types li
 
 - **`BtcConnectorId`**: Represents the identifier for a specific wallet connector. Common connector IDs include `"sat20"`, `"unisat"` and `"okx"`, which are used to specify the underlying service or platform for wallet operations.
 
-- **`BtcWalletNetwork`**: Specifies the blockchain network type the wallet operates on. Possible values include `"livenet"` for the main network where real transactions occur, and `"testnet"` for a sandbox environment used for testing purposes.
+- **`BtcWalletNetwork`**: Specifies the blockchain network type the wallet operates on. Possible values include `"mainnet"` for the main network where real transactions occur, and `"testnet"` for a sandbox environment used for testing purposes.
 
 ### BtcWalletConnect Detailed Documentation
 
@@ -24,7 +24,7 @@ Let's refine the documentation by including explanations for TypeScript types li
 Initialization:
 ```typescript
 const walletOptions: BtcWalletConnectOptions = {
-  network: "livenet",
+  network: "mainnet",
   defaultConnectorId: "sat20"
 };
 const wallet = new BtcWalletConnect(walletOptions);
@@ -127,7 +127,7 @@ This document describes the structure of the wallet state used within a cryptocu
 - `address`: The blockchain address of the wallet as a `string`.
 - `connected`: A `boolean` indicating whether the wallet is currently connected.
 - `initStatus`: A `boolean` indicating whether the wallet has been initialized.
-- `network`: The `BtcWalletNetwork` the wallet is connected to, e.g., `"livenet"` or `"testnet"`.
+- `network`: The `BtcWalletNetwork` the wallet is connected to, e.g., `"mainnet"` or `"testnet"`.
 - `connectorId?`: Optional. The `BtcConnectorId` of the currently selected connector.
 - `localConnectorId?`: Optional. The `BtcConnectorId` of the locally stored connector preference.
 - `connector?`: Optional. The current `Connector` instance used for blockchain interactions.
@@ -142,7 +142,7 @@ This document describes the structure of the wallet state used within a cryptocu
 
 - `BtcWalletConnect`: Represents the main class for wallet connectivity.
 - `Balance`: An object containing numeric fields for `confirmed`, `unconfirmed`, and `total` balances.
-- `BtcWalletNetwork`: Enumerates the blockchain networks supported, such as `"livenet"` and `"testnet"`.
+- `BtcWalletNetwork`: Enumerates the blockchain networks supported, such as `"mainnet"` and `"testnet"`.
 - `BtcConnectorId`: Identifies connectors by ID, such as  `"sat20"` or `"unisat"` or `"okx"`.
 - `Connector`: The interface for blockchain connector implementations.
 ```
@@ -163,7 +163,7 @@ function WalletComponent() {
   const { connect, disconnect, balance, init } = useReactWalletStore();
 
   useEffect(() => {
-    init({ network: 'livenet', defaultConnectorId: 'sat20' });
+    init({ network: 'mainnet', defaultConnectorId: 'sat20' });
   }, []);
 
   return (
@@ -189,7 +189,7 @@ import { WalletConnectReact } from 'btc-connect/dist/react';
 
 const App = () => (
   <WalletConnectReact
-    config={{ network: "livenet", defaultConnectorId: "sat20" }}
+    config={{ network: "mainnet", defaultConnectorId: "sat20" }}
     onConnectSuccess={() => console.log("Connected")}
     onConnectError={(error) => console.log("Connection Error:", error)}
     onDisconnectSuccess={() => console.log("Disconnected")}

@@ -76,7 +76,7 @@ import "btc-connect/dist/style/index.css";
 
 const App = () => {
   const config = {
-    network: 'livenet', // 或 'testnet'
+    network: 'mainnet', // 或 'testnet'
     defaultConnectorId: 'sat20', // unisat 或 'okx'
   };
 
@@ -149,7 +149,7 @@ export default MyComponent;
 import BtcWalletConnect from 'btc-connect';
 
 const config = {
-  network: 'livenet', // 或 'testnet'
+  network: 'mainnet', // 或 'testnet'
   defaultConnectorId: 'unisat', // 或 'okx'
 };
 
