@@ -76,7 +76,8 @@ export const WalletConnectReact = ({
       if (isSwitchNetwork) {
         await btcWallet?.switchNetwork(network);
       }
-      connect();
+      console.log('walletSelect')
+      await connect();
       btcWallet && onConnectSuccess?.(btcWallet);
     } catch (error) {
       onConnectError?.(error);
