@@ -24,7 +24,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "build": "npm run tailwind && bun build.js",
+    "build": "bun build.js",
     "dev": "bun build-dev.js",
     "tailwind": "tailwindcss -i src/style/input.css -o dist/style/index.css --minify",
     "prepare": "husky",

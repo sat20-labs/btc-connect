@@ -47,27 +47,26 @@ class BtcWalletConnect {
     const needSat20 = (window.location.hostname !== 'ordx.market');
 
     this.connectors = [
-      // {
-      //   id: 'sat20',
-      //   instance: new Sat20Connector(this.network),
-      //   installed: !!window.sat20,
-      // },
       {
-        id: 'unisat',
-        instance: new UnisatConnector(this.network),
-      },
-      {
-        id: 'okx',
-        instance: new OkxConnector(this.network),
-      },
-    ];
-
-    if (needSat20) {
-      this.connectors.unshift({
         id: 'sat20',
         instance: new Sat20Connector(this.network),
-      });
-    }
+      },
+      // {
+      //   id: 'unisat',
+      //   instance: new UnisatConnector(this.network),
+      // },
+      // {
+      //   id: 'okx',
+      //   instance: new OkxConnector(this.network),
+      // },
+    ];
+
+    // if (needSat20) {
+    //   this.connectors.unshift({
+    //     id: 'sat20',
+    //     instance: new Sat20Connector(this.network),
+    //   });
+    // }
 
     this.localConnectorId = (localStorage.getItem(this.local_storage_key) as BtcConnectorId) || undefined;
     this.disConnectStatus = localStorage.getItem(this.local_disconnect_key) == '1';

@@ -29,6 +29,56 @@ export interface WalletConnectReactProps {
   children?: any;
 }
 
+// --- Styles for WalletConnectReact ---
+const styles = {
+    buttonBase: {
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderRadius: '0.75rem', // rounded-xl
+        height: '2.5rem', // h-10
+        paddingLeft: '1rem', // px-4
+        paddingRight: '1rem',
+        lineHeight: '1', // leading-none
+        backgroundClip: 'text',
+        WebkitBackgroundClip: 'text', // For Safari compatibility
+        color: 'transparent',
+        cursor: 'pointer',
+        transition: 'border-color 0.2s ease', // For hover effect
+        display: 'inline-flex', // To align content vertically if needed
+        alignItems: 'center',
+        justifyContent: 'center',
+    } as React.CSSProperties,
+    connectButtonTheme: (theme: 'light' | 'dark'): React.CSSProperties => ({
+        backgroundImage: theme === 'dark'
+            ? 'linear-gradient(to right, #ec4899, #8b5cf6)' // from-pink-500 to-violet-500
+            : 'linear-gradient(to right, #3b82f6, #22c55e)', // from-blue-500 to-green-500
+        borderColor: theme === 'dark' ? '#4b5563' : '#d1d5db', // border-gray-600 / border-gray-300
+    }),
+    disconnectButtonTheme: (theme: 'light' | 'dark'): React.CSSProperties => ({
+         backgroundImage: theme === 'dark'
+            ? 'linear-gradient(to right, #ec4899, #8b5cf6)' // from-pink-500 to-violet-500
+            : 'linear-gradient(to right, #3b82f6, #22c55e)', // from-blue-500 to-green-500
+        borderColor: '#d1d5db', // border-gray-300 (seems constant in original)
+    }),
+    buttonHover: {
+        borderColor: '#f59e0b', // border-yellow-500
+    } as React.CSSProperties,
+    disconnectButtonLayout: { // Specific layout for disconnect button
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    } as React.CSSProperties,
+    disconnectText: {
+        marginRight: '0.25rem', // mr-1
+    } as React.CSSProperties,
+    exitIcon: (theme: 'light' | 'dark'): React.CSSProperties => ({
+        color: theme === 'dark' ? '#ffffff' : '#000000', // text-white / text-black
+        width: '1em', // Maintain default size or adjust as needed
+        height: '1em',
+    }),
+};
+// --- End Styles ---
+
 export const WalletConnectReact = ({
   config: { network = 'mainnet' } = {},
   theme = 'dark',
@@ -65,6 +115,9 @@ export const WalletConnectReact = ({
     switchNetwork,
     switchConnector,
   } = useReactWalletStore((state) => state);
+
+  const [connectHover, setConnectHover] = useState(false);
+  const [disconnectHover, setDisconnectHover] = useState(false);
 
   const handleConnect = () => {
     setModalVisible(true);
@@ -120,10 +173,14 @@ export const WalletConnectReact = ({
         <>
           <button
             onClick={handleConnect}
-            className={`bg-clip-text text-transparent border  rounded-xl h-10 px-4 leading-none hover:border-yellow-500 ${theme === 'dark'
-              ? 'bg-gradient-to-r from-pink-500 to-violet-500 border-gray-600'
-              : 'bg-gradient-to-r from-blue-500 to-green-500 border-gray-300'
-              } ${connectClass}`}
+            style={{
+              ...styles.buttonBase,
+              ...styles.connectButtonTheme(theme),
+              ...(connectHover ? styles.buttonHover : {}),
+            }}
+            onMouseEnter={() => setConnectHover(true)}
+            onMouseLeave={() => setConnectHover(false)}
+            className={connectClass}
           >
             {connectText}
           </button>
@@ -143,14 +200,19 @@ export const WalletConnectReact = ({
       ) : (
         <button
           onClick={handlerDisconnect}
-          className={`bg-clip-text text-transparent border border-gray-300 rounded-xl leading-none h-10 px-4 hover:border-yellow-500 flex justify-center items-center ${theme === 'dark'
-            ? 'bg-gradient-to-r from-pink-500 to-violet-500'
-            : 'bg-gradient-to-r from-blue-500 to-green-500'
-            } ${disconnectClass}`}
+          style={{
+            ...styles.buttonBase,
+            ...styles.disconnectButtonTheme(theme),
+            ...styles.disconnectButtonLayout,
+            ...(disconnectHover ? styles.buttonHover : {}),
+          }}
+          onMouseEnter={() => setDisconnectHover(true)}
+          onMouseLeave={() => setDisconnectHover(false)}
+          className={disconnectClass}
         >
-          <span className='mr-1'>{hideStr(address, 4, '***')}</span>
+          <span style={styles.disconnectText}>{hideStr(address, 4, '***')}</span>
           <ExitIcon
-            className={`${theme === 'dark' ? 'text-white' : 'text-black'}`}
+            style={styles.exitIcon(theme)}
           />
         </button>
       )}
