@@ -16,7 +16,7 @@ export abstract class BtcConnector {
 
   public connected: boolean = false;
   address: Address | undefined = '';
-
+  public downloadUrl: string | undefined = '';
   publicKey: string | undefined;
 
   network: WalletNetwork;
@@ -29,7 +29,7 @@ export abstract class BtcConnector {
   get installed(): boolean {
     return false;
   }
-  
+
   abstract connect(): Promise<boolean>;
 
   abstract sendToAddress(toAddress: string, amount: number): Promise<string>;

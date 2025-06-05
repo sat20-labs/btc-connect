@@ -152,6 +152,7 @@ export const WalletConnectReact = ({
         id: c.id,
         name: c.name,
         logo: c.logo,
+        downloadUrl: c.connector.downloadUrl,
         get installed() {
           return c.installed;
         },

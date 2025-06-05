@@ -100,8 +100,8 @@ export class Sat20Connector extends BtcConnector {
   readonly logo: string = sat20Logo;
   readonly networks: WalletNetwork[] = ['mainnet', 'testnet'];
   public homepage = 'https://sat20.org';
+  public downloadUrl = 'https://github.com/sat20-labs/sat20wallet/releases/download/0.0.1/sat20wallet-chrome.zip';
   public banance: Balance = { confirmed: 0, unconfirmed: 0, total: 0 };
-  
 
   constructor(network: WalletNetwork) {
     super(network);

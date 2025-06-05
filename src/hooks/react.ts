@@ -78,10 +78,11 @@ export const useReactWalletStore = create<WalletStore>()(
             id: con.id as any,
             name: con.instance.name,
             logo: con.instance.logo,
+            downloadUrl: con.instance.downloadUrl,
             connector: con.instance,
             get installed() {
               return con.instance.installed;
-            } 
+            }
           })),
           initStatus: true,
         }));

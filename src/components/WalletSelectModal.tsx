@@ -76,8 +76,8 @@ const styles = {
     justifyContent: 'center',
     transition: 'background-color 0.2s ease',
   } as React.CSSProperties,
-   closeButtonHover: (theme: 'light' | 'dark'): React.CSSProperties => ({
-     backgroundColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+  closeButtonHover: (theme: 'light' | 'dark'): React.CSSProperties => ({
+    backgroundColor: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
   }),
   closeIconBase: (theme: 'light' | 'dark'): React.CSSProperties => ({
     width: '1.25rem', // w-5 looks better
@@ -111,7 +111,7 @@ const styles = {
     transition: 'background-color 0.15s ease-out', // Faster transition
   }),
   walletItemHoverActive: (theme: 'light' | 'dark'): React.CSSProperties => ({
-     backgroundColor: theme === 'dark' ? '#27272a' : '#f3f4f6', // bg-zinc-800 / bg-gray-100
+    backgroundColor: theme === 'dark' ? '#27272a' : '#f3f4f6', // bg-zinc-800 / bg-gray-100
   }),
   loadingOverlay: {
     position: 'absolute',
@@ -207,23 +207,23 @@ export const WalletSelectModal = ({
   };
   useEffect(() => {
     setIsBrowser(true);
-     // Add style tag for animation when component mounts in browser
-     const styleTag = document.createElement('style');
-     styleTag.id = 'spin-animation-style'; // Add an ID to prevent duplicates
-     styleTag.innerHTML = spinAnimation;
-     if (!document.getElementById(styleTag.id)) {
-        document.head.appendChild(styleTag);
-     }
-     // Cleanup style tag on unmount
-     return () => {
-         const existingStyleTag = document.getElementById(styleTag.id);
-         if (existingStyleTag) {
-             // Check if parentNode exists before removing
-             if (existingStyleTag.parentNode) {
-                existingStyleTag.parentNode.removeChild(existingStyleTag);
-             }
-         }
-     };
+    // Add style tag for animation when component mounts in browser
+    const styleTag = document.createElement('style');
+    styleTag.id = 'spin-animation-style'; // Add an ID to prevent duplicates
+    styleTag.innerHTML = spinAnimation;
+    if (!document.getElementById(styleTag.id)) {
+      document.head.appendChild(styleTag);
+    }
+    // Cleanup style tag on unmount
+    return () => {
+      const existingStyleTag = document.getElementById(styleTag.id);
+      if (existingStyleTag) {
+        // Check if parentNode exists before removing
+        if (existingStyleTag.parentNode) {
+          existingStyleTag.parentNode.removeChild(existingStyleTag);
+        }
+      }
+    };
   }, []);
 
   const modalContent = visible ? (
@@ -242,9 +242,9 @@ export const WalletSelectModal = ({
           <button
             onClick={() => !loading && onClose?.()}
             style={{
-                 ...styles.closeButton,
-                 ...(hoveredClose ? styles.closeButtonHover(theme) : {})
-             }}
+              ...styles.closeButton,
+              ...(hoveredClose ? styles.closeButtonHover(theme) : {})
+            }}
             onMouseEnter={() => setHoveredClose(true)}
             onMouseLeave={() => setHoveredClose(false)}
             disabled={!!loading}
@@ -261,12 +261,12 @@ export const WalletSelectModal = ({
         {/* Wallet List */}
         <div style={styles.walletListContainer}>
           {wallets.map((wallet: any) => {
-             const isLoadingThis = loading === wallet.id;
-             const isHovered = hoveredWallet === wallet.id;
-             const itemStyle = {
-                 ...styles.walletItemBase(theme, wallet.installed),
-                 ...((isHovered || isLoadingThis) && wallet.installed ? styles.walletItemHoverActive(theme) : {}), // Apply hover/active style
-             };
+            const isLoadingThis = loading === wallet.id;
+            const isHovered = hoveredWallet === wallet.id;
+            const itemStyle = {
+              ...styles.walletItemBase(theme, wallet.installed),
+              ...((isHovered || isLoadingThis) && wallet.installed ? styles.walletItemHoverActive(theme) : {}), // Apply hover/active style
+            };
 
             return (
               <div
@@ -285,8 +285,8 @@ export const WalletSelectModal = ({
                     {/* Use SVG for loading icon for color control */}
                     <svg
                       style={styles.loadingIcon(theme)}
-                       className="animate-spin-modal"
-                       xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      className="animate-spin-modal"
+                      xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
@@ -304,14 +304,18 @@ export const WalletSelectModal = ({
                 </div>
 
                 {/* Not Installed Text */}
-                {!wallet.installed && (
+                {!wallet.installed && (wallet.downloadUrl ? (
+                  <a href={wallet.downloadUrl} target="_blank" rel="noopener noreferrer" >
+                    Download
+                  </a>
+                ) : (
                   <div style={styles.notInstalledText(theme)}>
                     Not Installed
-                  </div>
+                  </div>)
                 )}
               </div>
             )
-           })}
+          })}
         </div>
       </div>
     </div>
@@ -321,9 +325,9 @@ export const WalletSelectModal = ({
     // Ensure the portal target exists
     let portalContainer = document.getElementById('wallet-modal-portal');
     if (!portalContainer) {
-        portalContainer = document.createElement('div');
-        portalContainer.id = 'wallet-modal-portal';
-        document.body.appendChild(portalContainer);
+      portalContainer = document.createElement('div');
+      portalContainer.id = 'wallet-modal-portal';
+      document.body.appendChild(portalContainer);
     }
     return ReactDOM.createPortal(modalContent, portalContainer);
   } else {
