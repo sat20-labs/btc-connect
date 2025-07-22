@@ -6,7 +6,6 @@ import { hideStr } from '../utils';
 import { ExitIcon } from './ExitIcon';
 import { useReactWalletStore } from '../hooks';
 import { BtcWalletConnectOptions, BtcConnectorId } from '../types/wallet';
-
 export interface WalletConnectReactProps {
   config?: BtcWalletConnectOptions;
   theme?: 'light' | 'dark';
@@ -80,7 +79,7 @@ const styles = {
 // --- End Styles ---
 
 export const WalletConnectReact = ({
-  config: { network = 'mainnet' } = {},
+  config: { network = 'mainnet', enabledConnectors } = {},
   theme = 'dark',
   isSwitchNetwork = false,
   ui: {
@@ -161,11 +160,11 @@ export const WalletConnectReact = ({
   }, [connectors]);
 
   useEffect(() => {
-    init({ network });
+    init({ network, enabledConnectors });
   }, []);
 
   useEffect(() => {
-    init({ network });
+    init({ network, enabledConnectors });
   }, [network]);
 
   return (

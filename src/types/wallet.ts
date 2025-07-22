@@ -1,5 +1,6 @@
 export interface BtcWalletConnectOptions {
   network?: BtcWalletNetwork;
+  enabledConnectors?: BtcConnectorId[];
 }
 export type BtcWalletNetwork = 'mainnet' | 'testnet';
 export type BtcConnectorId = 'sat20' | 'unisat' | 'okx';
